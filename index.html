@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil no GitHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
+
+        h1, h2 {
+            font-weight: 600;
+        }
+
+        #profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        #profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin-right: 20px;
+        }
+
+        .repo {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+
+        .repo h3 {
+            margin: 0;
+        }
+
+        .repo a {
+            text-decoration: none;
+            color: #0366d6;
+        }
+
+        .repo p {
+            margin: 8px 0 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Meu Perfil no GitHub</h1>
+
+    <div id="profile">
+        <img id="avatar" src="" alt="Foto de Perfil">
+        <div>
+            <h2 id="name"></h2>
+            <p id="bio"></p>
+            <p><strong>Localização:</strong> <span id="location"></span></p>
+            <p><a id="profile-link" href="" target="_blank">Ver perfil completo no GitHub</a></p>
+        </div>
+    </div>
+
+    <h2>Repositórios</h2>
+    <div id="repos"></div>
+
+    <script>
+        const username = "SEU_USUARIO";  // substitua
+
+        async function loadProfile() {
+            const response = await fetch(`https://api.github.com/users/${username}`);
+            const data = await response.json();
+
+            document.getElementById("avatar").src = data.avatar_url;
+            document.getElementById("name").textContent = data.name || data.login;
+            document.getElementById("bio").textContent = data.bio || "Sem bio definida.";
+            document.getElementById("location").textContent = data.location || "Não informado";
+            document.getElementById("profile-link").href = data.html_url;
+        }
+
+        async function loadRepos() {
+            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+            const repos = await response.json();
+
+            const container = document.getElementById("repos");
+            container.innerHTML = "";
+
+            repos.forEach(repo => {
+                const div = document.createElement("div");
+                div.className = "repo";
+                div.innerHTML = `
+                    <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+                    <p>${repo.description || "Sem descrição."}</p>
+                    <p><strong>Linguagem:</strong> ${repo.language || "N/A"}</p>
+                    <p><strong>Atualizado:</strong> ${new Date(repo.updated_at).toLocaleDateString("pt-BR")}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        loadProfile();
+        loadRepos();
+    </script>
+
+</body>
+</html>
