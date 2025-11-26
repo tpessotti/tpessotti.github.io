@@ -3,30 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Tiago | GitHub Portfolio</title>
+  <title>Tiago Pessotti | Portfólio GitHub</title>
 
   <!-- Fonte retrô 80/90 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     :root{
-      --bg: #05010c;
-      --bg2:#0c0220;
-      --neon-pink:#ff3cac;
+      --bg: #04010a;
+      --bg2:#0b021c;
+      --neon-orange:#ff8c00;
       --neon-cyan:#2bd2ff;
       --neon-purple:#8b5cf6;
       --neon-green:#00f5a0;
-      --text:#e6e6e6;
-      --muted:#a7a7a7;
+      --text:#e9e9ee;
+      --muted:#a7a7b6;
       --card:#0b0b16;
       --card2:#120b28;
-      --grid:rgba(43,210,255,0.12);
+      --grid:rgba(43,210,255,0.14);
       --warning:#ffd166;
+      --danger:#ff5d5d;
+      --ok:#7CFC98;
     }
 
     *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
     body{
       margin:0;
       color:var(--text);
@@ -41,7 +47,7 @@
       position:relative;
     }
 
-    /* Scanlines + noise (CRT) */
+    /* CRT: scanlines + noise */
     body::before{
       content:"";
       position:fixed; inset:0;
@@ -55,7 +61,7 @@
         );
       mix-blend-mode: overlay;
       pointer-events:none;
-      opacity:.35;
+      opacity:.30;
       z-index:2;
       animation: scanMove 8s linear infinite;
     }
@@ -71,15 +77,12 @@
           <rect width="120" height="120" filter="url(%23n)" opacity="0.08"/>\
         </svg>');
       pointer-events:none;
-      opacity:.25;
+      opacity:.22;
       z-index:1;
       animation: noise 0.6s steps(2) infinite;
     }
 
-    @keyframes scanMove{ 
-      0%{transform:translateY(0);} 
-      100%{transform:translateY(12px);} 
-    }
+    @keyframes scanMove{0%{transform:translateY(0);}100%{transform:translateY(12px);}}
     @keyframes noise{
       0%{transform:translate(0,0);}
       25%{transform:translate(-2%,1%);}
@@ -88,55 +91,71 @@
       100%{transform:translate(1%,2%);}
     }
 
-    header{
-      padding:48px 20px 10px;
-      max-width:1100px;
-      margin:0 auto;
-      position:relative;
-      z-index:3;
-    }
+    /* Layout geral */
+    .wrap{max-width:1100px; margin:0 auto; padding:0 20px; position:relative; z-index:3;}
 
-    .topbar{
-      display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+    /* Header hero */
+    header{padding:40px 0 0;}
+    .hero{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap:18px;
+      align-items:center;
       border:1px solid var(--grid);
-      background:linear-gradient(180deg, rgba(11,11,22,0.9), rgba(18,11,40,0.9));
+      background:linear-gradient(180deg, rgba(11,11,22,0.95), rgba(18,11,40,0.92));
       padding:16px;
-      border-radius:10px;
+      border-radius:12px;
       box-shadow:
-        0 0 25px rgba(255,60,172,0.15),
-        0 0 30px rgba(43,210,255,0.08);
+        0 0 25px rgba(255,140,0,0.18),
+        0 0 30px rgba(43,210,255,0.10);
       animation: flicker 4.5s infinite;
     }
 
     @keyframes flicker{
       0%, 100% {filter:brightness(1);}
       92% {filter:brightness(1);}
-      93% {filter:brightness(1.1);}
-      94% {filter:brightness(0.9);}
-      96% {filter:brightness(1.05);}
+      93% {filter:brightness(1.08);}
+      94% {filter:brightness(0.92);}
+      96% {filter:brightness(1.04);}
     }
 
     .avatar{
-      width:120px; height:120px; border-radius:8px; flex:0 0 auto;
+      width:130px; height:130px; border-radius:10px;
       border:2px solid var(--neon-cyan);
-      box-shadow:0 0 15px rgba(43,210,255,0.7);
+      box-shadow:0 0 16px rgba(43,210,255,0.7);
       image-rendering: pixelated;
       background:#000;
     }
 
-    .title{
+    .name{
       font-family:"Press Start 2P", system-ui;
       font-size:20px; line-height:1.3; color:#fff;
       text-shadow:
-        0 0 6px var(--neon-cyan),
-        0 0 12px var(--neon-pink);
+        0 0 7px var(--neon-orange),
+        0 0 12px var(--neon-cyan);
+      margin-bottom:6px;
     }
 
-    .subtitle{
+    .typing{
+      font-size:26px;
+      color:#fff;
+      text-shadow:0 0 8px rgba(255,140,0,0.55);
+      white-space:nowrap;
+      overflow:hidden;
+      border-right: 2px solid var(--neon-orange);
+      width:0;
+      animation: typing 2.8s steps(38,end) forwards, caret .9s step-end infinite;
+    }
+    @keyframes typing{to{width:100%;}}
+    @keyframes caret{50%{border-color:transparent;}}
+
+    .sub{
       color:var(--muted);
       font-size:22px;
+      margin-top:4px;
     }
 
+    .chips{margin-top:10px;}
     .chip{
       display:inline-block;
       padding:4px 8px;
@@ -145,111 +164,11 @@
       background:rgba(0,0,0,0.35);
       color:#fff;
       margin:2px 6px 2px 0;
-      box-shadow:0 0 8px rgba(139,92,246,0.25);
+      box-shadow:0 0 8px rgba(255,140,0,0.25);
       font-size:18px;
     }
 
-    main{
-      max-width:1100px; margin:0 auto; padding:20px;
-      position:relative; z-index:3;
-    }
-
-    .section{
-      margin:22px 0 42px;
-      border:1px solid var(--grid);
-      border-radius:10px;
-      background:linear-gradient(180deg, rgba(11,11,22,0.9), rgba(18,11,40,0.85));
-      padding:18px 18px 10px;
-      box-shadow:0 0 20px rgba(139,92,246,0.12);
-    }
-
-    .section h2{
-      font-family:"Press Start 2P";
-      font-size:14px;
-      letter-spacing:1px;
-      margin:0 0 12px 0;
-      color:var(--neon-green);
-      text-shadow:0 0 8px rgba(0,245,160,0.8);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap:12px;
-    }
-
-    .card{
-      background: radial-gradient(600px 200px at 20% -20%, #1b0b3e 0%, transparent 70%),
-                  linear-gradient(180deg, var(--card), var(--card2));
-      border:1px solid var(--grid);
-      border-radius:8px;
-      padding:12px;
-      position:relative;
-      overflow:hidden;
-      transform:translateY(6px);
-      opacity:0;
-      animation: riseIn .6s ease forwards;
-    }
-    .card:nth-child(2){animation-delay:.08s;}
-    .card:nth-child(3){animation-delay:.16s;}
-    .card:nth-child(4){animation-delay:.24s;}
-    .card:nth-child(5){animation-delay:.32s;}
-    .card:nth-child(6){animation-delay:.40s;}
-
-    @keyframes riseIn{
-      to{opacity:1; transform:translateY(0);}
-    }
-
-    .card:hover{
-      border-color:rgba(255,60,172,0.7);
-      box-shadow:
-        0 0 0 1px rgba(255,60,172,0.4),
-        0 0 18px rgba(255,60,172,0.35),
-        0 0 28px rgba(43,210,255,0.18);
-      transform:translateY(-2px);
-      transition:all .15s ease;
-    }
-
-    .repo-title{
-      display:flex; justify-content:space-between; gap:8px; align-items:center;
-      margin-bottom:6px;
-    }
-
-    .repo-title a{
-      color:#fff; text-decoration:none; font-weight:700;
-      text-shadow:0 0 6px rgba(43,210,255,0.6);
-      letter-spacing:.4px;
-      font-size:22px;
-    }
-
-    .repo-meta{
-      color:var(--muted);
-      font-size:18px;
-    }
-
-    .label{
-      font-family:"Press Start 2P";
-      font-size:10px;
-      color:#000;
-      background:var(--warning);
-      padding:4px 6px;
-      border-radius:4px;
-      box-shadow:0 0 8px rgba(255,209,102,.7);
-    }
-
-    .lang{
-      color:var(--neon-cyan);
-      font-weight:700;
-    }
-
-    .desc{
-      min-height:42px;
-    }
-
-    .links{
-      margin-top:8px;
-      display:flex; gap:10px; flex-wrap:wrap;
-    }
+    .links{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;}
     .btn{
       display:inline-block;
       padding:6px 10px;
@@ -266,180 +185,1286 @@
       box-shadow:0 0 14px rgba(43,210,255,0.5);
     }
 
-    footer{
-      max-width:1100px; margin:0 auto; padding:0 20px 40px;
-      color:var(--muted); position:relative; z-index:3;
-      font-size:18px;
+    /* Tabs */
+    .tabs{
+      margin-top:14px;
+      position:sticky; top:0; z-index:4;
+      background:rgba(4,1,10,0.95);
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid var(--grid);
+      padding:10px 0;
     }
-
-    .tiny{
-      font-size:18px;
-      color:var(--muted);
-    }
-
-    .hr{
-      height:1px; background:var(--grid); margin:10px 0 14px;
-    }
-
-    .blink{
-      animation: blink 1.2s step-end infinite;
-    }
-    @keyframes blink{
-      50%{opacity:0;}
-    }
-
-    /* Divisor de categorias */
-    .cat{
-      display:flex; align-items:center; gap:8px;
-      margin:10px 0 8px;
-    }
-    .cat span{
+    .tabbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .tab{
       font-family:"Press Start 2P";
       font-size:11px;
-      color:var(--neon-pink);
-      text-shadow:0 0 8px rgba(255,60,172,0.9);
+      padding:10px 14px;
+      border:1px solid var(--grid);
+      border-radius:6px;
+      cursor:pointer;
+      background:rgba(0,0,0,0.5);
+      color:var(--muted);
+      transition:all .2s ease;
+    }
+    .tab:hover{
+      color:#fff;
+      border-color:var(--neon-cyan);
+    }
+    .tab.active{
+      border-color:var(--neon-orange);
+      background:rgba(255,140,0,0.15);
+      color:#fff;
+      box-shadow:0 0 12px rgba(255,140,0,0.55);
+      text-shadow:0 0 8px rgba(255,140,0,0.9);
+    }
+
+    .search{
+      margin-left:auto;
+      display:flex; gap:8px; align-items:center;
+      border:1px solid var(--grid);
+      background:rgba(0,0,0,0.45);
+      padding:6px 8px;
+      border-radius:6px;
+      min-width:220px;
+    }
+    .search input{
+      width:100%;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:var(--text);
+      font-family:"VT323", monospace;
+      font-size:20px;
+    }
+
+    .toggle{
+      font-family:"Press Start 2P";
+      font-size:10px;
+      padding:8px 10px;
+      border:1px dashed var(--grid);
+      border-radius:6px;
+      cursor:pointer;
+      color:var(--muted);
+      background:rgba(0,0,0,0.35);
+    }
+
+    /* Tab content */
+    .tab-content{
+      display:none;
+      animation: fadeIn .4s ease;
+    }
+    .tab-content.active{
+      display:block;
+    }
+    @keyframes fadeIn{
+      from{opacity:0; transform:translateY(10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    /* Tab Headers Neon */
+    .tab-header{
+      margin:20px 0 24px;
+      padding:20px;
+      border-radius:12px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .tab-header::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:12px;
+      padding:2px;
+      background:linear-gradient(90deg, transparent, currentColor, transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity:.6;
+      animation:borderGlow 3s linear infinite;
+    }
+    @keyframes borderGlow{
+      0%, 100%{opacity:.4;}
+      50%{opacity:.8;}
+    }
+
+    .tab-header.apresentacao{
+      background:linear-gradient(135deg, rgba(43,210,255,0.08), rgba(139,92,246,0.08));
+      border:1px solid rgba(43,210,255,0.3);
+      color:var(--neon-cyan);
+    }
+    .tab-header.experiencias{
+      background:linear-gradient(135deg, rgba(0,245,160,0.08), rgba(43,210,255,0.08));
+      border:1px solid rgba(0,245,160,0.3);
+      color:var(--neon-green);
+    }
+    .tab-header.repositorios{
+      background:linear-gradient(135deg, rgba(255,140,0,0.08), rgba(255,60,172,0.08));
+      border:1px solid rgba(255,140,0,0.3);
+      color:var(--neon-orange);
+    }
+
+    .tab-header h1{
+      font-family:"Press Start 2P";
+      font-size:22px;
+      margin:0 0 10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .tab-header.apresentacao h1{
+      text-shadow:
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan),
+        0 0 30px rgba(43,210,255,0.5);
+    }
+    .tab-header.experiencias h1{
+      text-shadow:
+        0 0 10px var(--neon-green),
+        0 0 20px var(--neon-green),
+        0 0 30px rgba(0,245,160,0.5);
+    }
+    .tab-header.repositorios h1{
+      text-shadow:
+        0 0 10px var(--neon-orange),
+        0 0 20px var(--neon-orange),
+        0 0 30px rgba(255,140,0,0.5);
+    }
+
+    .tab-header p{
+      font-size:22px;
+      margin:0;
+      opacity:.85;
+    }
+
+    /* Seções */
+    main{padding:16px 0 30px;}
+    .section{
+      margin:18px 0 26px;
+      border:1px solid var(--grid);
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(11,11,22,0.95), rgba(18,11,40,0.9));
+      padding:20px;
+      box-shadow:0 0 20px rgba(139,92,246,0.10);
+    }
+    .section h2{
+      font-family:"Press Start 2P";
+      font-size:14px;
+      letter-spacing:1px;
+      margin:0 0 16px 0;
+      color:var(--neon-green);
+      text-shadow:0 0 8px rgba(0,245,160,0.8);
+    }
+
+    /* Timeline */
+    .timeline{
+      position:relative;
+      padding:20px 0 20px 50px;
+    }
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:20px;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:linear-gradient(180deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      box-shadow:0 0 10px rgba(43,210,255,0.6);
+    }
+
+    .timeline-item{
+      position:relative;
+      margin-bottom:32px;
+      padding:16px 18px;
+      background:linear-gradient(135deg, rgba(11,11,22,0.9), rgba(18,11,40,0.8));
+      border:1px solid var(--grid);
+      border-radius:8px;
+      box-shadow:0 0 15px rgba(139,92,246,0.15);
+      transition:all .2s ease;
+    }
+    .timeline-item:hover{
+      border-color:var(--neon-cyan);
+      box-shadow:0 0 20px rgba(43,210,255,0.3);
+      transform:translateX(4px);
+    }
+    .timeline-item::before{
+      content:"";
+      position:absolute;
+      left:-35px;
+      top:22px;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:var(--neon-cyan);
+      border:3px solid var(--bg);
+      box-shadow:0 0 12px var(--neon-cyan);
+      z-index:1;
+    }
+
+    .timeline-year{
+      font-family:"Press Start 2P";
+      font-size:11px;
+      color:var(--neon-orange);
+      text-shadow:0 0 8px rgba(255,140,0,0.8);
+      margin-bottom:8px;
+    }
+
+    .timeline-title{
+      font-size:24px;
+      font-weight:700;
+      color:#fff;
+      margin-bottom:4px;
+      text-shadow:0 0 6px rgba(255,255,255,0.4);
+    }
+
+    .timeline-company{
+      color:var(--neon-cyan);
+      font-size:20px;
+      margin-bottom:10px;
+    }
+
+    .timeline-desc{
+      color:var(--text);
+      line-height:1.6;
+      margin-top:8px;
+    }
+    .timeline-desc ul{
+      margin:8px 0;
+      padding-left:20px;
+    }
+
+    .timeline-tags{
+      margin-top:12px;
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .timeline-tag{
+      font-size:16px;
+      padding:4px 8px;
+      background:rgba(43,210,255,0.15);
+      border:1px solid rgba(43,210,255,0.3);
+      border-radius:4px;
+      color:var(--neon-cyan);
+    }
+
+    /* Skills Section - DOS Style */
+    .skills-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:20px;
+    }
+
+    .skill-item{
+      margin-bottom:8px;
+    }
+
+    .skill-label{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:6px;
+      font-size:20px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 6px rgba(43,210,255,0.6);
+    }
+
+    .skill-percent{
+      color:var(--neon-orange);
+      font-family:"Press Start 2P";
+      font-size:11px;
+      text-shadow:0 0 6px rgba(255,140,0,0.8);
+    }
+
+    .skill-bar-bg{
+      height:24px;
+      background:rgba(0,0,0,0.5);
+      border:1px solid var(--grid);
+      border-radius:4px;
+      overflow:hidden;
+      position:relative;
+      box-shadow:inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .skill-bar-fill{
+      height:100%;
+      background:linear-gradient(90deg, 
+        var(--neon-cyan) 0%, 
+        var(--neon-purple) 50%, 
+        var(--neon-pink) 100%);
+      box-shadow:
+        0 0 10px rgba(43,210,255,0.6),
+        inset 0 0 10px rgba(255,255,255,0.3);
+      position:relative;
+      overflow:hidden;
+      width:0;
+      transition:width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .skill-bar-fill::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-100%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation:shimmer 2s infinite;
+    }
+
+    @keyframes shimmer{
+      0%{left:-100%;}
+      100%{left:200%;}
+    }
+
+    .skill-bar-fill::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.1) 2px,
+        rgba(0,0,0,0.1) 4px
+      );
+    }
+
+    .skill-item.animate .skill-bar-fill{
+      width:var(--skill-width);
+    }
+
+    /* Grid de repos */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:12px;
+    }
+
+    /* Cards de repo */
+    .card{
+      background:
+        radial-gradient(600px 200px at 20% -20%, #1b0b3e 0%, transparent 70%),
+        linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--grid);
+      border-radius:10px;
+      padding:12px;
+      transform:translateY(6px);
+      opacity:0;
+      animation: riseIn .6s ease forwards;
+      position:relative;
+      overflow:hidden;
+    }
+    @keyframes riseIn{to{opacity:1; transform:translateY(0);}}
+
+    .card:hover{
+      border-color:var(--neon-orange);
+      box-shadow:
+        0 0 0 1px rgba(255,140,0,0.4),
+        0 0 18px rgba(255,140,0,0.35),
+        0 0 28px rgba(43,210,255,0.18);
+      transform:translateY(-2px);
+      transition:all .15s ease;
+    }
+
+    .repo-title{
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+    }
+    .repo-title a{
+      color:#fff; text-decoration:none; font-weight:700;
+      text-shadow:0 0 6px rgba(43,210,255,0.6);
+      letter-spacing:.4px;
+      font-size:22px;
+    }
+
+    .badge{
+      font-family:"Press Start 2P";
+      font-size:10px;
+      color:#000;
+      background:var(--warning);
+      padding:4px 6px;
+      border-radius:4px;
+      box-shadow:0 0 8px rgba(255,209,102,.7);
+      white-space:nowrap;
+    }
+    .badge.work{background:var(--warning);}
+    .badge.personal{background:var(--ok);}
+    .badge.misc{background:#c4b5fd;}
+
+    .desc{min-height:44px; margin-top:6px;}
+
+    .meta{
+      color:var(--muted);
+      font-size:18px;
+      margin-top:8px;
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    }
+    .lang{color:var(--neon-cyan); font-weight:700;}
+    .dot{opacity:.6;}
+
+    .mini-links{margin-top:8px; display:flex; gap:8px;}
+    .mini-links a{
+      font-size:18px;
+      color:#fff; text-decoration:none;
+      border-bottom:1px dashed var(--grid);
+    }
+    .mini-links a:hover{border-bottom-color:var(--neon-orange);}
+
+    /* Estados */
+    .empty{
+      color:var(--muted);
+      padding:12px;
+      border:1px dashed var(--grid);
+      border-radius:8px;
+      background:rgba(0,0,0,0.25);
+      text-align:center;
+    }
+
+    footer{
+      padding:10px 0 40px;
+      color:var(--muted);
+      font-size:18px;
+      border-top:1px solid var(--grid);
+    }
+
+    /* CRT boost toggle */
+    .crt-boost body::before{opacity:.45;}
+    .crt-boost .hero{box-shadow:0 0 35px rgba(255,140,0,0.28), 0 0 40px rgba(43,210,255,0.18);}
+
+    /* Responsividade para timeline */
+    @media (max-width: 600px) {
+      .timeline{padding-left:35px;}
+      .timeline::before{left:12px;}
+      .timeline-item::before{left:-26px;}
+    }
+
+    /* 3D Canvas para Interesses */
+    #interestCanvas{
+      width:100%;
+      height:600px;
+      border-radius:12px;
+      border:1px solid var(--grid);
+      background:#000;
+      cursor:crosshair;
+      position:relative;
+    }
+
+    .canvas-controls{
+      position:absolute;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:10px;
+      z-index:10;
+      background:rgba(11,11,22,0.9);
+      padding:12px 20px;
+      border-radius:8px;
+      border:1px solid var(--grid);
+      box-shadow:0 0 20px rgba(43,210,255,0.3);
+    }
+
+    .control-hint{
+      font-family:"Press Start 2P";
+      font-size:10px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 6px rgba(43,210,255,0.8);
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .control-key{
+      background:rgba(43,210,255,0.2);
+      border:1px solid var(--neon-cyan);
+      padding:4px 8px;
+      border-radius:4px;
+      box-shadow:0 0 8px rgba(43,210,255,0.4);
+    }
+
+    /* Card de interesse */
+    .interest-card{
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:400px;
+      max-width:90%;
+      background:linear-gradient(135deg, rgba(11,11,22,0.98), rgba(18,11,40,0.98));
+      border:2px solid var(--neon-purple);
+      border-radius:12px;
+      padding:24px;
+      box-shadow:
+        0 0 30px rgba(139,92,246,0.6),
+        0 0 60px rgba(43,210,255,0.3);
+      z-index:1000;
+      display:none;
+      animation:cardPop 0.3s ease;
+    }
+
+    @keyframes cardPop{
+      from{opacity:0; transform:translate(-50%, -50%) scale(0.8);}
+      to{opacity:1; transform:translate(-50%, -50%) scale(1);}
+    }
+
+    .interest-card.show{
+      display:block;
+    }
+
+    .interest-card h3{
+      font-family:"Press Start 2P";
+      font-size:16px;
+      color:var(--neon-purple);
+      margin:0 0 12px;
+      text-shadow:0 0 10px rgba(139,92,246,0.8);
+    }
+
+    .interest-card p{
+      line-height:1.6;
+      margin:8px 0;
+    }
+
+    .interest-card .close-btn{
+      position:absolute;
+      top:12px;
+      right:12px;
+      background:rgba(255,93,93,0.2);
+      border:1px solid var(--danger);
+      color:var(--danger);
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      transition:all .2s;
+    }
+
+    .interest-card .close-btn:hover{
+      background:rgba(255,93,93,0.4);
+      box-shadow:0 0 12px var(--danger);
+    }
+
+    .canvas-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.7);
+      z-index:999;
+      display:none;
+    }
+
+    .canvas-overlay.show{
+      display:block;
+    }
+
+    /* Tooltip para gavetas */
+    #drawerTooltip{
+      position:fixed;
+      background:linear-gradient(135deg, rgba(11,11,22,0.98), rgba(18,11,40,0.98));
+      border:2px solid var(--neon-cyan);
+      border-radius:8px;
+      padding:8px 12px;
+      font-family:"Press Start 2P";
+      font-size:10px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 8px rgba(43,210,255,0.8);
+      pointer-events:none;
+      z-index:2000;
+      display:none;
+      box-shadow:0 0 20px rgba(43,210,255,0.5);
+      white-space:nowrap;
+    }
+
+    #drawerTooltip.show{
+      display:block;
+    }
+
+    /* Menu de Pausa */
+    #pauseMenu{
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      background:linear-gradient(135deg, rgba(11,11,22,0.98), rgba(18,11,40,0.98));
+      border:3px solid var(--neon-cyan);
+      border-radius:12px;
+      padding:40px 60px;
+      z-index:2001;
+      display:none;
+      text-align:center;
+      box-shadow:0 0 40px rgba(43,210,255,0.6), inset 0 0 20px rgba(43,210,255,0.1);
+    }
+
+    #pauseMenu.show{
+      display:block;
+      animation:fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0; transform:translate(-50%, -50%) scale(0.9);}
+      to{opacity:1; transform:translate(-50%, -50%) scale(1);}
+    }
+
+    #pauseMenu h2{
+      font-family:"Press Start 2P";
+      font-size:24px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 15px rgba(43,210,255,0.8);
+      margin:0 0 30px;
+    }
+
+    #pauseMenu .pause-info{
+      font-family:"VT323";
+      font-size:18px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .pause-btn{
+      font-family:"Press Start 2P";
+      font-size:12px;
+      padding:12px 24px;
+      margin:10px;
+      background:linear-gradient(135deg, rgba(43,210,255,0.2), rgba(139,92,246,0.2));
+      border:2px solid var(--neon-cyan);
+      border-radius:6px;
+      color:var(--neon-cyan);
+      cursor:pointer;
+      transition:all 0.2s ease;
+      text-shadow:0 0 8px rgba(43,210,255,0.6);
+    }
+
+    .pause-btn:hover{
+      background:linear-gradient(135deg, rgba(43,210,255,0.4), rgba(139,92,246,0.4));
+      box-shadow:0 0 20px rgba(43,210,255,0.6);
+      transform:translateY(-2px);
+    }
+
+    /* Menu de Pausa */
+    #pauseMenu{
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      background:linear-gradient(135deg, rgba(11,11,22,0.98), rgba(18,11,40,0.98));
+      border:3px solid var(--neon-cyan);
+      border-radius:12px;
+      padding:40px 60px;
+      z-index:2001;
+      display:none;
+      text-align:center;
+      box-shadow:0 0 40px rgba(43,210,255,0.6), inset 0 0 20px rgba(43,210,255,0.1);
+    }
+
+    #pauseMenu.show{
+      display:block;
+      animation:fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0; transform:translate(-50%, -50%) scale(0.9);}
+      to{opacity:1; transform:translate(-50%, -50%) scale(1);}
+    }
+
+    #pauseMenu h2{
+      font-family:"Press Start 2P";
+      font-size:24px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 15px rgba(43,210,255,0.8);
+      margin:0 0 30px;
+    }
+
+    #pauseMenu .pause-info{
+      font-family:"VT323";
+      font-size:18px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .pause-btn{
+      font-family:"Press Start 2P";
+      font-size:12px;
+      padding:12px 24px;
+      margin:10px;
+      background:linear-gradient(135deg, rgba(43,210,255,0.2), rgba(139,92,246,0.2));
+      border:2px solid var(--neon-cyan);
+      border-radius:6px;
+      color:var(--neon-cyan);
+      cursor:pointer;
+      transition:all 0.2s ease;
+      text-shadow:0 0 8px rgba(43,210,255,0.6);
+    }
+
+    .pause-btn:hover{
+      background:linear-gradient(135deg, rgba(43,210,255,0.4), rgba(139,92,246,0.4));
+      box-shadow:0 0 20px rgba(43,210,255,0.6);
+      transform:translateY(-2px);
+    }
+
+    /* Loading Screen */
+    .loading-screen{
+      position:absolute;
+      inset:0;
+      background:rgba(5,5,16,0.95);
+      display:none; /* Começa escondido */
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      z-index:100;
+      border-radius:12px;
+    }
+
+    .loading-screen.show{
+      display:flex; /* Mostra como flex quando ativo */
+    }
+
+    .loading-screen.hidden{
+      display:none;
+    }
+
+    .loader-text{
+      font-family:"Press Start 2P";
+      font-size:14px;
+      color:var(--neon-cyan);
+      text-shadow:0 0 10px rgba(43,210,255,0.8);
+      margin-bottom:10px;
+    }
+
+    .progress-bar-container{
+      width:300px;
+      height:30px;
+      background:rgba(0,0,0,0.5);
+      border:2px solid var(--neon-cyan);
+      border-radius:6px;
+      overflow:hidden;
+      box-shadow:0 0 20px rgba(43,210,255,0.4);
+    }
+
+    .progress-bar-fill{
+      height:100%;
+      background:linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      width:0%;
+      transition:width 0.3s ease;
+      box-shadow:0 0 15px rgba(43,210,255,0.6);
+      position:relative;
+    }
+
+    .progress-bar-fill::after{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background:repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.1) 10px,
+        rgba(255,255,255,0.1) 20px
+      );
+    }
+
+    .progress-percentage{
+      font-family:"Press Start 2P";
+      font-size:12px;
+      color:var(--neon-orange);
+      text-shadow:0 0 8px rgba(255,140,0,0.8);
+      margin-top:10px;
+    }
+
+    .error-message{
+      font-family:"VT323";
+      font-size:18px;
+      color:var(--danger);
+      text-align:center;
+      padding:20px;
+      max-width:400px;
     }
   </style>
 </head>
 
 <body>
-<header>
-  <div class="topbar">
-    <img id="avatar" class="avatar" src="" alt="avatar">
-    <div style="flex:1 1 320px;">
-      <div class="title" id="name">Carregando<span class="blink">_</span></div>
-      <div class="subtitle" id="headline"></div>
-      <div class="tiny" id="location"></div>
-      <div style="margin-top:8px;" id="chips"></div>
-      <div class="links">
-        <a id="ghLink" class="btn" target="_blank">GitHub</a>
-        <a id="cmpLink" class="btn" target="_blank" href="#">CMP / Carbon Metrics Project</a>
-        <a id="mailLink" class="btn" href="#">Contato</a>
+  <header class="wrap">
+    <div class="hero">
+      <img id="avatar" class="avatar" src="https://media.licdn.com/dms/image/v2/C4D03AQG50bXFZ-xcNA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1618250215035?e=1765411200&v=beta&t=21GW3N2yRHSz-H8rUFqXvCAZsaejD9YOcgzs66tbQts" alt="avatar">
+      <div>
+        <div class="name">TIAGO PESSOTTI</div>
+        <div class="typing" id="typingLine">Consultor de Descarbonização & Dev</div>
+        <div class="sub">Economista • Mestre em Economia e Gestão de Ciência, Tecnologia e Inovação</div>
+
+        <div class="chips" id="chips"></div>
+
+        <div class="links">
+          <a class="btn" href="https://github.com/tpessotti" target="_blank">GitHub</a>
+          <a class="btn" href="https://cmp.eco" target="_blank">cmp.eco</a>
+          <a class="btn" href="https://www.linkedin.com/in/tpessotti7/" target="_blank">LinkedIn</a>
+        </div>
       </div>
     </div>
-  </div>
-</header>
 
-<main>
-  <section class="section">
-    <h2>APRESENTAÇÃO</h2>
-    <p id="bioText">
-      Carregando perfil do GitHub...
-    </p>
-    <div class="hr"></div>
-    <p>
-      Trabalho com consultoria em descarbonização, modelagem de emissões e otimização de decisões
-      para indústria pesada e logística. Desenvolvo ferramentas próprias em Python (SimPy, otimização,
-      dashboards em Streamlit), e também projetos criativos como jogos, narrativas históricas e sistemas
-      de RPG. Gosto de juntar rigor técnico e imaginação útil.
-    </p>
-  </section>
+    <div class="tabs">
+      <div class="tabbar">
+        <button class="tab active" data-tab="apresentacao">Apresentação</button>
+        <button class="tab" data-tab="experiencias">Experiências</button>
+        <button class="tab" data-tab="interesses">Interesses</button>
+        <button class="tab" data-tab="repositorios">Repositórios</button>
 
-  <section class="section">
-    <h2>FERRAMENTAS DE TRABALHO</h2>
-    <div class="cat"><span>> Modelos, simuladores, calculadoras</span></div>
-    <div id="workRepos" class="grid"></div>
-  </section>
+        <label class="search" title="Filtrar repositórios" id="searchBox" style="display:none;">
+          <span style="opacity:.7;">SEARCH></span>
+          <input id="searchInput" type="text" placeholder="nome, linguagem...">
+        </label>
+      </div>
+    </div>
+  </header>
 
-  <section class="section">
-    <h2>PROJETOS PESSOAIS</h2>
-    <div class="cat"><span>> Jogos, LSBC, experimentos criativos</span></div>
-    <div id="personalRepos" class="grid"></div>
-  </section>
+  <main class="wrap">
+    <!-- TAB: APRESENTAÇÃO -->
+    <div class="tab-content active" id="apresentacao">
+      <div class="tab-header apresentacao">
+        <h1>// APRESENTAÇÃO</h1>
+        <p>Quem sou, o que faço e por que importa</p>
+      </div>
 
-  <section class="section">
-    <h2>OUTROS REPOSITÓRIOS</h2>
-    <div id="otherRepos" class="grid"></div>
-  </section>
-</main>
+      <section class="section">
+        <h2>SOBRE MIM</h2>
+        <p>
+          Consultor especializado em descarbonização, modelagem sistêmica e otimização aplicada à indústria
+          e logística. Desenvolvo ferramentas proprietárias em Python (SimPy, otimização matemática,
+          análise multicritério e dashboards em Streamlit) para apoiar decisões de alto impacto em operações
+          complexas.
+        </p>
+        <p>
+          Sou cofundador da <strong>CMP - Carbon Metrics Project</strong>, onde construímos metodologias próprias
+          para avaliação de emissões, alternativas tecnológicas e estratégias de transição climática.
+        </p>
+        <p>
+          Em paralelo, mantenho projetos pessoais de jogos, simuladores, sistemas de RPG e narrativa histórica -
+          porque criatividade sem estrutura é devaneio, e estrutura sem criatividade é burocracia.
+        </p>
+      </section>
 
-<footer>
-  <div>© <span id="year"></span> Tiago — feito com neon, café e teimosia.</div>
-  <div class="tiny">Hospedado via GitHub Pages.</div>
-</footer>
+      <section class="section">
+        <h2>SKILLS & FERRAMENTAS</h2>
+        <div class="skills-grid">
+          <div>
+            <div class="skill-item" data-skill="85">
+              <div class="skill-label">
+                <span>Python</span>
+                <span class="skill-percent">85%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:85%;"></div>
+              </div>
+            </div>
 
+            <div class="skill-item" data-skill="70">
+              <div class="skill-label">
+                <span>SimPy / Simulação Discreta</span>
+                <span class="skill-percent">70%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:70%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item" data-skill="55">
+              <div class="skill-label">
+                <span>Otimização</span>
+                <span class="skill-percent">55%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:55%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item" data-skill="90">
+              <div class="skill-label">
+                <span>Streamlit / Dashboards</span>
+                <span class="skill-percent">90%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:90%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="skill-item" data-skill="90">
+              <div class="skill-label">
+                <span>R / Análise Estatística</span>
+                <span class="skill-percent">90%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:90%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item" data-skill="75">
+              <div class="skill-label">
+                <span>Excel Avançado</span>
+                <span class="skill-percent">75%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:75%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item" data-skill="85">
+              <div class="skill-label">
+                <span>Modelagem de Emissões GEE</span>
+                <span class="skill-percent">85%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:85%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-item" data-skill="78">
+              <div class="skill-label">
+                <span>Git / GitHub</span>
+                <span class="skill-percent">78%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="--skill-width:78%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB: EXPERIÊNCIAS -->
+    <div class="tab-content" id="experiencias">
+      <div class="tab-header experiencias">
+        <h1>// EXPERIÊNCIAS</h1>
+        <p>Trajetória profissional e acadêmica completa</p>
+      </div>
+
+      <section class="section">
+        <h2>LINHA DO TEMPO</h2>
+        <div class="timeline">
+          
+          <div class="timeline-item">
+            <div class="timeline-year">2024 - PRESENTE</div>
+            <div class="timeline-title">Consultor</div>
+            <div class="timeline-company">IESB - Instituto de Estudos Sistêmicos do Brasil</div>
+            <div class="timeline-desc">
+              Desenvolvimento de modelos complexos de descarbonização e simulação para grandes empresas:
+              <ul>
+                <li><strong>VALE:</strong> Modelo completo de descarbonização (VESO) integrando curvas tecnológicas, 
+                emissões escopo 1/2/3, lógica sistêmica e interação com outros sistemas VALE.</li>
+                <li><strong>Portocel/Suzano:</strong> Simulador de lead time portuário, uso de ternos, 
+                restrições operacionais e otimização do sequenciamento de carregamento.</li>
+              </ul>
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Python</span>
+              <span class="timeline-tag">Excel</span>
+              <span class="timeline-tag">Descarbonização</span>
+              <span class="timeline-tag">Otimização</span>
+              <span class="timeline-tag">Simulação</span>
+              <span class="timeline-tag">Pensamento Sistêmico</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2023 - PRESENTE</div>
+            <div class="timeline-title">Co-fundador</div>
+            <div class="timeline-company">CMP - Carbon Metrics Project</div>
+            <div class="timeline-desc">
+              Criação de metodologias proprietárias para avaliação de emissões, transição tecnológica, 
+              AHP multicritério, modelos de otimização e ferramentas de descarbonização para pequenas e grandes 
+              empresas brasileiras. Desenvolvimento de plataformas web e ferramentas de análise.
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Consultoria</span>
+              <span class="timeline-tag">Emissões GEE</span>
+              <span class="timeline-tag">Python</span>
+              <span class="timeline-tag">AHP</span>
+              <span class="timeline-tag">Streamlit</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2022 - 2023</div>
+            <div class="timeline-title">Analista de Corporate Actions</div>
+            <div class="timeline-company">BNP Paribas Securities Services</div>
+            <div class="timeline-desc">
+              Processamento de eventos corporativos (dividendos, splits, mergers) para clientes internacionais, 
+              com foco no mercado de NY. Análise de risco operacional, validação de processos e automação de workflows.
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Corporate Actions</span>
+              <span class="timeline-tag">Mercado Financeiro</span>
+              <span class="timeline-tag">Análise de Risco</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2020 - 2022</div>
+            <div class="timeline-title">Mestrado em Economia e Gestão de Ciência, Tecnologia e Inovação</div>
+            <div class="timeline-company">Universidade de Coimbra</div>
+            <div class="timeline-desc">
+              Especialização em Economia e Gestão de Ciência, Tecnologia e Inovação. 
+              Pesquisa focada em modelagem econômica, análise de políticas públicas e inovação tecnológica.
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Economia</span>
+              <span class="timeline-tag">Inovação</span>
+              <span class="timeline-tag">Pesquisa</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2020 - 2021</div>
+            <div class="timeline-title">Competidor</div>
+            <div class="timeline-company">Global Management Challenge</div>
+            <div class="timeline-desc">
+              Participação no maior campeonato de gestão do mundo. Análise de mercado, 
+              planejamento financeiro e simulações de negócios em equipe multidisciplinar.
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Estratégia</span>
+              <span class="timeline-tag">Simulação</span>
+              <span class="timeline-tag">Gestão</span>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2014 - 2019</div>
+            <div class="timeline-title">Graduação em Economia</div>
+            <div class="timeline-company">Universidade de Coimbra</div>
+            <div class="timeline-desc">
+              Formação sólida em teoria econômica, econometria, microeconomia e macroeconomia. 
+              Base para desenvolvimento de modelos quantitativos e análise de decisões.
+            </div>
+            <div class="timeline-tags">
+              <span class="timeline-tag">Economia</span>
+              <span class="timeline-tag">Econometria</span>
+              <span class="timeline-tag">Análise Quantitativa</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>DETALHAMENTO PROFISSIONAL</h2>
+        
+        <div style="margin-bottom:30px; padding:20px; background:rgba(43,210,255,0.05); border-left:3px solid var(--neon-cyan); border-radius:6px;">
+          <h3 style="margin:0 0 10px; color:var(--neon-cyan); font-size:24px;">Consultor em Modelagem e Otimização</h3>
+          <div style="color:var(--muted); margin-bottom:12px;">IESB • 2024 - Presente • Brasil</div>
+          <p>Desenvolvimento de soluções customizadas para grandes empresas:</p>
+          <ul style="line-height:1.8;">
+            <li><strong>VALE - Modelo de Descarbonização (VESO):</strong> Arquitetura completa integrando 
+            curvas de tecnologia, emissões Escopo 1/2/3, lógica sistêmica e integração com outros sistemas corporativos.</li>
+            <li><strong>Portocel/Suzano - Simulador Portuário:</strong> Ferramenta de simulação discreta para 
+            cálculo de lead time de navios, otimização de uso de ternos e sequenciamento de operações de carregamento.</li>
+          </ul>
+          <div style="margin-top:12px;">
+            <strong>Tecnologias:</strong> Python, SimPy, PuLP, Pandas, Streamlit, Plotly, NumPy
+          </div>
+        </div>
+
+        <div style="margin-bottom:30px; padding:20px; background:rgba(0,245,160,0.05); border-left:3px solid var(--neon-green); border-radius:6px;">
+          <h3 style="margin:0 0 10px; color:var(--neon-green); font-size:24px;">Co-fundador</h3>
+          <div style="color:var(--muted); margin-bottom:12px;">CMP - Carbon Metrics Project • 2023 - Presente</div>
+          <p>Empresa de consultoria em descarbonização e transição energética:</p>
+          <ul style="line-height:1.8;">
+            <li>Desenvolvimento de metodologias proprietárias para cálculo de emissões GEE</li>
+            <li>Análise multicritério (AHP) para decisões de transição tecnológica</li>
+            <li>Ferramentas web para gestão de inventários de carbono</li>
+            <li>Consultoria estratégica para pequenas e grandes empresas</li>
+          </ul>
+          <div style="margin-top:12px;">
+            <strong>Website:</strong> <a href="https://cmp.eco" target="_blank" style="color:var(--neon-green);">cmp.eco</a>
+          </div>
+        </div>
+
+        <div style="margin-bottom:30px; padding:20px; background:rgba(139,92,246,0.05); border-left:3px solid var(--neon-purple); border-radius:6px;">
+          <h3 style="margin:0 0 10px; color:var(--neon-purple); font-size:24px;">Analista de Corporate Actions</h3>
+          <div style="color:var(--muted); margin-bottom:12px;">BNP Paribas Securities Services • 2022-2023 • Lisboa</div>
+          <p>Processamento e validação de eventos corporativos no mercado financeiro internacional:</p>
+          <ul style="line-height:1.8;">
+            <li>Gestão de dividendos, splits, mergers e aquisições para clientes institucionais</li>
+            <li>Validação de processos e mitigação de risco operacional</li>
+            <li>Interface com mercados internacionais (NYSE, NASDAQ)</li>
+            <li>Automação de workflows de processamento</li>
+          </ul>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- TAB: INTERESSES -->
+    <div class="tab-content" id="interesses">
+      <div class="tab-header" style="background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(255,60,172,0.08)); border:1px solid rgba(139,92,246,0.3); color:var(--neon-purple);">
+        <h1 style="text-shadow:0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 30px rgba(139,92,246,0.5);">// INTERESSES</h1>
+        <p>Explore meu universo de interesses em 3D</p>
+      </div>
+
+      <section class="section">
+        <h2>ARQUIVO DE INTERESSES</h2>
+        
+        <!-- Tela Inicial -->
+        <div id="interestWelcome" style="text-align:center; padding:80px 20px;">
+          <div style="font-family:'Press Start 2P'; font-size:28px; color:var(--neon-purple); text-shadow:0 0 20px rgba(139,92,246,0.8); margin-bottom:30px; line-height:1.6;">
+            ARQUIVO DE MEMÓRIAS
+          </div>
+          <div style="font-family:'VT323'; font-size:20px; color:var(--muted); margin-bottom:50px; line-height:1.8;">
+            Um espaço 3D interativo onde cada gaveta guarda<br>
+            um fragmento dos meus interesses e paixões.<br><br>
+            Navegue livremente, explore os filing cabinets<br>
+            e descubra o que move minha curiosidade.
+          </div>
+          <button class="pause-btn" style="font-size:14px; padding:16px 32px;" onclick="initializeInterests()">
+            INICIALIZAR ARQUIVO DE MEMÓRIAS
+          </button>
+          <div style="font-family:'VT323'; font-size:14px; color:var(--muted); margin-top:30px;">
+            * Requer suporte a WebGL
+          </div>
+        </div>
+        
+        <p id="interestInstructions" style="margin-bottom:20px; color:var(--muted); display:none;">
+          Use <strong style="color:var(--neon-cyan);">WASD</strong> para mover, 
+          <strong style="color:var(--neon-cyan);">Mouse</strong> para olhar ao redor. 
+          Clique nos <strong style="color:var(--neon-purple);">filing cabinets</strong> para descobrir meus interesses.
+        </p>
+        
+        <div id="interestContainer" style="position:relative; display:none;">
+          <canvas id="interestCanvas"></canvas>
+          
+          <div class="loading-screen" id="loadingScreen">
+            <div class="loader-text">CARREGANDO AMBIENTE 3D...</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <div class="progress-percentage" id="progressPercentage">0%</div>
+            <div class="error-message" id="errorMessage" style="display:none;"></div>
+          </div>
+
+          <div class="canvas-controls">
+            <div class="control-hint">
+              <span class="control-key">W A S D</span>
+              <span>Mover</span>
+            </div>
+            <div class="control-hint">
+              <span class="control-key">MOUSE</span>
+              <span>Olhar</span>
+            </div>
+            <div class="control-hint">
+              <span class="control-key">CLICK</span>
+              <span>Abrir</span>
+            </div>
+            <div class="control-hint">
+              <span class="control-key">ESC</span>
+              <span>Pausar</span>
+            </div>
+            <div class="control-hint">
+              <span class="control-key">R</span>
+              <span>Resetar</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Menu de Pausa -->
+        <div id="pauseMenu">
+          <h2>// PAUSADO</h2>
+          <div class="pause-info">Pressione ESC para continuar</div>
+          <div class="pause-info">ou</div>
+          <button class="pause-btn" onclick="togglePause()">CONTINUAR</button>
+          <button class="pause-btn" onclick="resetPosition()">RESETAR POSIÇÃO</button>
+          <button class="pause-btn" style="border-color:var(--neon-orange); color:var(--neon-orange);" onclick="closeInterests()">FECHAR ARQUIVO</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB: REPOSITÓRIOS -->
+    <div class="tab-content" id="repositorios">
+      <div class="tab-header repositorios">
+        <h1>// REPOSITÓRIOS</h1>
+        <p>Projetos open source e ferramentas desenvolvidas</p>
+      </div>
+
+      <section class="section">
+        <h2>FERRAMENTAS DE TRABALHO</h2>
+        <div id="workRepos" class="grid"></div>
+        <div id="workEmpty" class="empty" style="display:none;">Nenhum repositório de trabalho encontrado.</div>
+      </section>
+
+      <section class="section">
+        <h2>PROJETOS PESSOAIS</h2>
+        <div id="personalRepos" class="grid"></div>
+        <div id="personalEmpty" class="empty" style="display:none;">Nenhum projeto pessoal encontrado.</div>
+      </section>
+
+      <section class="section">
+        <h2>OUTROS REPOSITÓRIOS</h2>
+        <div id="otherRepos" class="grid"></div>
+        <div id="otherEmpty" class="empty" style="display:none;">Nenhum outro repositório encontrado.</div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="wrap">
+    © <span id="year"></span> Tiago Pessotti - hospedado via GitHub Pages.
+  </footer>
 
 <script>
-  const username = "SEU_USUARIO"; // <-- TROQUE AQUI
+  const username = "tpessotti";
 
-  // Edite essas listas com os "pins" reais.
-  // Coloque o nome do repo exatamente como no GitHub.
-  const workProjects = [
-    // exemplos (troque pelos seus):
-    "veso-optimizer",
-    "calculadora-emissoes",
-    "simpy-port-operations",
-    "streamlit-sankey-dashboard"
-  ];
+  const workProjects = ["calculadora_emissoes", "sankeytool", "veso-optimizer", "simpy-port-operations"];
+  const personalProjects = ["personagem_rpg", "futgol", "lsbc", "reis-de-nassau"];
 
-  const personalProjects = [
-    // exemplos (troque pelos seus):
-    "lsbc",
-    "futgol",
-    "reis-de-nassau",
-    "pirate-platformer-godot"
-  ];
-
-  // Chips de identidade (baseado no que eu sei de você)
   const identityChips = [
-    "Consultoria em Descarbonização",
+    "Descarbonização",
     "Modelagem & Otimização",
-    "Simulação Discreta (SimPy)",
-    "Python / Streamlit",
-    "Jogos & Ferramentas Criativas",
-    "CMP — Carbon Metrics Project"
+    "SimPy",
+    "Python",
+    "Streamlit",
+    "R"
   ];
 
-  function makeRepoCard(repo, tagText=null){
-    const lang = repo.language || "N/A";
+  const chipsDiv = document.getElementById("chips");
+  chipsDiv.innerHTML = identityChips.map(c => `<span class="chip">${c}</span>`).join("");
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function makeRepoCard(repo, kind){
     const updated = new Date(repo.updated_at).toLocaleDateString("pt-BR");
-    const desc = repo.description || "Sem descrição ainda. (melhorar isso ajuda mais do que você imagina).";
+    const lang = repo.language || "N/A";
+    const desc = repo.description || "Sem descrição ainda.";
+
+    const badgeClass = kind === "work" ? "work" : kind === "personal" ? "personal" : "misc";
+    const badgeText  = kind === "work" ? "TRABALHO" : kind === "personal" ? "PESSOAL" : "MISC";
 
     return `
-      <article class="card">
+      <article class="card" data-name="${repo.name.toLowerCase()}" data-lang="${lang.toLowerCase()}" data-desc="${desc.toLowerCase()}" data-kind="${kind}">
         <div class="repo-title">
           <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-          ${tagText ? `<span class="label">${tagText}</span>` : ""}
+          <span class="badge ${badgeClass}">${badgeText}</span>
         </div>
         <div class="desc">${desc}</div>
-        <div class="repo-meta">
-          <span class="lang">${lang}</span> • ★ ${repo.stargazers_count} • Forks ${repo.forks_count}
-          <br/>Atualizado em ${updated}
+        <div class="meta">
+          <span class="lang">${lang}</span>
+          <span class="dot">•</span>
+          <span>★ ${repo.stargazers_count}</span>
+          <span class="dot">•</span>
+          <span>Forks ${repo.forks_count}</span>
+          <span class="dot">•</span>
+          <span>${updated}</span>
         </div>
-        <div class="links">
-          <a class="btn" href="${repo.html_url}" target="_blank">Código</a>
-          ${repo.homepage ? `<a class="btn" href="${repo.homepage}" target="_blank">Demo</a>` : ""}
+        <div class="mini-links">
+          <a href="${repo.html_url}" target="_blank">Código</a>
+          ${repo.homepage ? `<a href="${repo.homepage}" target="_blank">Demo</a>` : ""}
         </div>
       </article>
     `;
-  }
-
-  async function loadProfile(){
-    const res = await fetch(`https://api.github.com/users/${username}`);
-    const u = await res.json();
-
-    document.getElementById("avatar").src = u.avatar_url;
-    document.getElementById("name").textContent = u.name || u.login;
-
-    document.getElementById("headline").textContent =
-      "Consultor • Desenvolvedor • Criador de ferramentas e mundos";
-
-    document.getElementById("location").textContent =
-      u.location ? `Base: ${u.location}` : "Base: Brasil";
-
-    document.getElementById("ghLink").href = u.html_url;
-    document.getElementById("mailLink").href =
-      u.email ? `mailto:${u.email}` : `https://github.com/${username}`;
-
-    const chipsDiv = document.getElementById("chips");
-    chipsDiv.innerHTML = identityChips.map(c => `<span class="chip">${c}</span>`).join("");
-
-    // Bio da API + um complemento seu
-    const gitBio = u.bio ? u.bio : "";
-    document.getElementById("bioText").textContent = gitBio || 
-      "Consultor em descarbonização e otimização de decisões, desenvolvedor de ferramentas próprias e projetos criativos.";
-
-    document.getElementById("year").textContent = new Date().getFullYear();
   }
 
   async function loadRepos(){
@@ -447,43 +1472,1125 @@
     let repos = await res.json();
     if (!Array.isArray(repos)) repos = [];
 
-    // Ordena por estrelas, depois update
-    repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) ||
-                        (new Date(b.updated_at) - new Date(a.updated_at)));
+    repos.sort((a,b) =>
+      (b.stargazers_count - a.stargazers_count) ||
+      (new Date(b.updated_at) - new Date(a.updated_at))
+    );
+
+    const workSet = new Set(workProjects.map(x => x.toLowerCase()));
+    const personalSet = new Set(personalProjects.map(x => x.toLowerCase()));
 
     const work = [];
     const personal = [];
     const other = [];
 
-    const workSet = new Set(workProjects.map(x => x.toLowerCase()));
-    const personalSet = new Set(personalProjects.map(x => x.toLowerCase()));
-
-    repos.forEach(r => {
+    for (const r of repos){
       const name = r.name.toLowerCase();
       if (workSet.has(name)) work.push(r);
       else if (personalSet.has(name)) personal.push(r);
       else other.push(r);
-    });
+    }
 
     const workDiv = document.getElementById("workRepos");
     const personalDiv = document.getElementById("personalRepos");
     const otherDiv = document.getElementById("otherRepos");
 
-    workDiv.innerHTML = work.length
-      ? work.map(r => makeRepoCard(r, "TRABALHO")).join("")
-      : `<div class="tiny">Sem pins definidos ainda. Edite a lista workProjects no HTML.</div>`;
+    workDiv.innerHTML = work.map(r => makeRepoCard(r,"work")).join("");
+    personalDiv.innerHTML = personal.map(r => makeRepoCard(r,"personal")).join("");
+    otherDiv.innerHTML = other.map(r => makeRepoCard(r,"other")).join("");
 
-    personalDiv.innerHTML = personal.length
-      ? personal.map(r => makeRepoCard(r, "PESSOAL")).join("")
-      : `<div class="tiny">Sem pins definidos ainda. Edite a lista personalProjects no HTML.</div>`;
-
-    otherDiv.innerHTML = other.length
-      ? other.slice(0, 18).map(r => makeRepoCard(r)).join("")
-      : `<div class="tiny">Nenhum repositório encontrado.</div>`;
+    handleEmptyStates();
+    applySearchFilter();
   }
 
-  loadProfile();
+  function handleEmptyStates(){
+    const ids = ["work","personal","other"];
+    for (const id of ids){
+      const grid = document.getElementById(id+"Repos");
+      const empty = document.getElementById(id+"Empty");
+      if (grid && empty) {
+        empty.style.display = grid.children.length ? "none" : "block";
+      }
+    }
+  }
+
+  /* Tabs */
+  const tabs = document.querySelectorAll(".tab");
+  const tabContents = document.querySelectorAll(".tab-content");
+  const searchBox = document.getElementById("searchBox");
+
+  tabs.forEach(t => t.addEventListener("click", () => {
+    const target = t.dataset.tab;
+    
+    tabs.forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    
+    tabContents.forEach(c => c.classList.remove("active"));
+    document.getElementById(target).classList.add("active");
+
+    // Mostra search apenas na aba de repositórios
+    if (target === "repositorios") {
+      searchBox.style.display = "flex";
+    } else {
+      searchBox.style.display = "none";
+    }
+  }));
+
+  /* Search filter */
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", applySearchFilter);
+
+  function applySearchFilter(){
+    const q = (searchInput.value || "").toLowerCase().trim();
+    const cards = document.querySelectorAll(".card");
+    cards.forEach(c => {
+      const hay = [
+        c.dataset.name, c.dataset.lang, c.dataset.desc
+      ].join(" ");
+      c.style.display = hay.includes(q) ? "" : "none";
+    });
+    handleEmptyStates();
+  }
+
   loadRepos();
+
+  /* Animar skills bars */
+  function animateSkills(){
+    const skills = document.querySelectorAll('.skill-item');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('animate');
+        }
+      });
+    }, {threshold: 0.5});
+
+    skills.forEach(skill => observer.observe(skill));
+  }
+
+  // Animar quando mudar de tab ou carregar
+  tabs.forEach(t => t.addEventListener("click", () => {
+    setTimeout(animateSkills, 100);
+  }));
+
+  // Animar na primeira carga
+  animateSkills();
+
+  /* ============================================
+     SISTEMA DE ÁUDIO
+     ============================================ */
+  let rainSound = null;
+  let drawerSound = null;
+  let isSoundEnabled = false;
+
+  function initSounds() {
+    // Som de chuva ambiente (loop)
+    rainSound = new Audio();
+    rainSound.volume = 0.3;
+    rainSound.loop = true;
+    // URL de som de chuva gratuito
+    rainSound.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+    
+    // Som de gaveta abrindo
+    drawerSound = new Audio();
+    drawerSound.volume = 0.5;
+    // URL de som de clique/abertura
+    drawerSound.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+    
+    isSoundEnabled = true;
+  }
+
+  function playRainSound() {
+    if (isSoundEnabled && rainSound) {
+      rainSound.play().catch(e => console.log('Rain sound blocked:', e));
+    }
+  }
+
+  function stopRainSound() {
+    if (rainSound) {
+      rainSound.pause();
+      rainSound.currentTime = 0;
+    }
+  }
+
+  function playDrawerSound() {
+    if (isSoundEnabled && drawerSound) {
+      drawerSound.currentTime = 0;
+      drawerSound.play().catch(e => console.log('Drawer sound blocked:', e));
+    }
+  }
+
+  /* ============================================
+     FUNÇÕES DE CONTROLE DO JOGO
+     ============================================ */
+  function togglePause() {
+    isPaused = !isPaused;
+    const canvas = document.getElementById('interestCanvas');
+    const pauseMenu = document.getElementById('pauseMenu');
+    
+    if (canvas) {
+      canvas.style.opacity = isPaused ? '0.5' : '1';
+    }
+    
+    if (pauseMenu) {
+      pauseMenu.classList.toggle('show', isPaused);
+    }
+    
+    if (isPaused) {
+      stopRainSound();
+    } else {
+      playRainSound();
+    }
+  }
+
+  function resetPosition() {
+    player.x = 0;
+    player.z = 0;
+    velocity.x = 0;
+    velocity.z = 0;
+    cameraRotation.yaw = 0;
+    cameraRotation.pitch = 0;
+    if (camera3D) {
+      camera3D.position.y = 1.6;
+    }
+  }
+  
+  function closeInterests() {
+    // Resetar estado PRIMEIRO
+    isPaused = false;
+    is3DInitialized = false;
+    
+    // Parar animação e sons
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+    stopRainSound();
+    
+    // Limpar recursos 3D para liberar memória
+    if (scene3D) {
+      scene3D.traverse((object) => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            object.material.forEach(mat => mat.dispose());
+          } else {
+            object.material.dispose();
+          }
+        }
+      });
+    }
+    if (renderer3D) {
+      renderer3D.dispose();
+      renderer3D = null;
+    }
+    
+    // Resetar variáveis globais
+    cabinets = [];
+    rainParticles = [];
+    interactiveDrawersCache = null;
+    visitedDrawers = new Set();
+    previousHoveredDrawer = null;
+    hoveredDrawer = null;
+    scene3D = null;
+    camera3D = null;
+    raycaster = null;
+    mouse3D = null;
+    
+    // Fechar menu de pausa
+    const pauseMenu = document.getElementById('pauseMenu');
+    if (pauseMenu) {
+      pauseMenu.classList.remove('show');
+    }
+    
+    // Esconder container e instruções
+    const container = document.getElementById('interestContainer');
+    if (container) {
+      container.style.transition = 'opacity 0.5s ease';
+      container.style.opacity = '0';
+      setTimeout(() => {
+        container.style.display = 'none';
+      }, 500);
+    }
+    
+    const instructions = document.getElementById('interestInstructions');
+    if (instructions) {
+      instructions.style.display = 'none';
+    }
+    
+    // Mostrar tela preta com botão
+    const interestSection = document.getElementById('interesses');
+    if (interestSection && !document.getElementById('closedScreen')) {
+      const closedDiv = document.createElement('div');
+      closedDiv.id = 'closedScreen';
+      closedDiv.style.cssText = `
+        width: 100%;
+        height: 600px;
+        background: #000;
+        border-radius: 12px;
+        border: 1px solid var(--grid);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        opacity: 0;
+        transition: opacity 0.5s ease 0.3s;
+      `;
+      closedDiv.innerHTML = `
+        <div style="font-family: 'Press Start 2P'; font-size: 14px; color: #888; text-align: center;">
+          ARQUIVO FECHADO
+        </div>
+        <button class="pause-btn" onclick="reopenInterests()" style="cursor: pointer;">
+          REABRIR ARQUIVO DE MEMÓRIAS
+        </button>
+      `;
+      
+      const section = interestSection.querySelector('.section');
+      if (section) {
+        section.appendChild(closedDiv);
+        setTimeout(() => {
+          closedDiv.style.opacity = '1';
+        }, 100);
+      }
+    }
+  }
+  
+  function reopenInterests() {
+    const closedScreen = document.getElementById('closedScreen');
+    if (closedScreen) {
+      closedScreen.style.opacity = '0';
+      setTimeout(() => {
+        closedScreen.remove();
+      }, 500);
+    }
+    
+    // Mostrar instruções
+    const instructions = document.getElementById('interestInstructions');
+    if (instructions) {
+      instructions.style.display = 'block';
+    }
+    
+    const container = document.getElementById('interestContainer');
+    if (container) {
+      container.style.display = 'block';
+      setTimeout(() => {
+        container.style.opacity = '1';
+      }, 100);
+    }
+    
+    // Sempre reiniciar cena 3D completamente
+    isPaused = false;
+    init3DScene();
+  }
+  
+  function initializeInterests() {
+    const welcome = document.getElementById('interestWelcome');
+    if (welcome) welcome.style.display = 'none';
+    
+    const instructions = document.getElementById('interestInstructions');
+    if (instructions) instructions.style.display = 'block';
+    
+    const container = document.getElementById('interestContainer');
+    if (container) {
+      container.style.display = 'block';
+      container.style.opacity = '1';
+    }
+    
+    // Aguardar um pouco mais para garantir que o layout foi calculado
+    setTimeout(() => {
+      init3DScene();
+    }, 100);
+  }
+
+  /* ============================================
+     3D INTERESSES - THREE.JS SCENE
+     ============================================ */
+  let scene3D, camera3D, renderer3D, cabinets = [];
+  let player = { x: 0, z: 0 };
+  let keys = {};
+  let raycaster, mouse3D;
+  let rainParticles = [];
+  let animationFrameId;
+  let is3DInitialized = false;
+  let visitedDrawers = new Set();
+  let hoveredDrawer = null;
+  let previousHoveredDrawer = null;
+  let velocity = { x: 0, z: 0 };
+  let isPaused = false;
+  
+  // Controle de câmera tipo FPS
+  let cameraRotation = { yaw: 0, pitch: 0 }; // yaw = horizontal, pitch = vertical
+  let lastMousePos = { x: 0, y: 0 };
+  let isMouseLocked = false;
+  let edgeRotationDirection = 0; // -1 = esquerda, 0 = parado, 1 = direita
+
+  // Funções de event listeners (para evitar duplicação)
+  function onKeyDown(e) {
+    keys[e.key.toLowerCase()] = true;
+    
+    // Pausar/Despausar com ESC
+    if (e.key === 'Escape') {
+      togglePause();
+    }
+    
+    // Reset position com tecla R
+    if (e.key.toLowerCase() === 'r') {
+      resetPosition();
+    }
+  }
+  
+  function onKeyUp(e) {
+    keys[e.key.toLowerCase()] = false;
+  }
+  
+  function onCanvasMouseLeave(e) {
+    const canvas = document.getElementById('interestCanvas');
+    const rect = canvas.getBoundingClientRect();
+    const mouseRelX = e.clientX - rect.left;
+    
+    // Se saiu pela esquerda, continuar girando à esquerda
+    if (mouseRelX < 0) {
+      edgeRotationDirection = 1;
+    }
+    // Se saiu pela direita, continuar girando à direita
+    else if (mouseRelX > rect.width) {
+      edgeRotationDirection = -1;
+    }
+  }
+  
+  function onCanvasMouseEnter() {
+    edgeRotationDirection = 0;
+  }
+
+  function updateProgress(percent, message) {
+    const progressBar = document.getElementById('progressBarFill');
+    const progressText = document.getElementById('progressPercentage');
+    const loaderText = document.querySelector('.loader-text');
+    
+    if (progressBar) progressBar.style.width = percent + '%';
+    if (progressText) progressText.textContent = percent + '%';
+    if (loaderText && message) loaderText.textContent = message;
+  }
+
+  function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    const loaderText = document.querySelector('.loader-text');
+    if (errorDiv) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+    if (loaderText) {
+      loaderText.style.display = 'none';
+    }
+    console.error('3D Error:', message);
+  }
+
+  const interestData = [
+    { title: "Simulação & Modelagem", desc: "Criação de modelos complexos de simulação discreta com SimPy, otimização matemática e análise de sistemas. Fascinação por replicar comportamentos emergentes de sistemas reais.", emoji: "🔬" },
+    { title: "História & Narrativas", desc: "Exploração de períodos históricos através de jogos e narrativas. Especial interesse em Brasil Colonial, República Velha e história econômica.", emoji: "📜" },
+    { title: "Game Design", desc: "Desenvolvimento de jogos como ferramentas de aprendizado e entretenimento. Desde plataformers retrô até simuladores de gestão.", emoji: "🎮" },
+    { title: "RPG de Mesa", desc: "Criação de sistemas próprios de RPG, campanhas históricas e mecânicas narrativas. Mestre de D&D e entusiasta de worldbuilding.", emoji: "🎲" },
+    { title: "Economia & Sistemas", desc: "Análise de sistemas econômicos complexos, teoria dos jogos, e como incentivos moldam comportamentos. Economia como ciência do design.", emoji: "📊" },
+    { title: "Sustentabilidade", desc: "Descarbonização industrial, transição energética e como tecnologia pode resolver problemas climáticos de forma pragmática.", emoji: "🌱" },
+    { title: "Café & Teimosia", desc: "Combustível essencial para projetos longos. O café é para manter acordado, a teimosia é para não desistir quando deveria.", emoji: "☕" },
+    { title: "Futebol Brasileiro", desc: "Análise tática, história do futebol brasileiro e simulações de campeonatos. Torcedor que entende que futebol é mais probabilidade que destino.", emoji: "⚽" },
+    { title: "Geopolitica Internacional", desc: "Análise de relações internacionais, conflitos, alianças e como economia, energia e tecnologia moldam o equilíbrio de poder global.", emoji: "🌍" },
+    { title: "Ficção Científica", desc: "De Asimov a Liu Cixin, passando por hard sci-fi e space opera. Interesse especial em como a ficção explora consequências de mudanças tecnológicas.", emoji: "🚀" },
+    { title: "Distopias & Futuros", desc: "1984, Admirável Mundo Novo, Black Mirror. Fascinação por cenários que exploram o que pode dar errado quando sistemas são levados ao extremo.", emoji: "🌆" },
+    { title: "Cozinha & Gastronomia", desc: "Experimentar receitas, entender química dos alimentos e o prazer de criar algo do zero. Cozinhar é ciência aplicada com recompensa imediata.", emoji: "🍳" },
+    { title: "Viagens & Culturas", desc: "Explorar novos lugares, entender diferentes culturas e perspectivas. Cada viagem é uma oportunidade de questionar pressupostos.", emoji: "✈️" },
+    { title: "Filosofia da Tecnologia", desc: "Como ferramentas moldam pensamento, ética em IA, e o impacto de longo prazo das escolhas tecnológicas que fazemos hoje.", emoji: "🧠" },
+    { title: "Música & Soundtracks", desc: "De trilhas épicas de jogos a jazz e música clássica. A trilha sonora certa transforma qualquer tarefa em uma experiência.", emoji: "🎵" },
+    { title: "Urbanismo & Cidades", desc: "Como cidades são planejadas (ou não), mobilidade urbana, e como design urbano afeta comportamento social e qualidade de vida.", emoji: "🏙️" },
+    { title: "Astronomia & Cosmos", desc: "Do Big Bang à expansão do universo. Fascinação pela imensidão do espaço e nossa busca por entendê-lo.", emoji: "🌌" },
+    { title: "História da Ciência", desc: "Como descobertas científicas aconteceram, os personagens por trás delas, e como método científico evoluiu ao longo do tempo.", emoji: "🔭" },
+    { title: "Cerveja Artesanal", desc: "Apreciação de diferentes estilos, compreensão do processo de fabricação e a cultura de micro-cervejas.", emoji: "🍺" },
+    { title: "Documentação & Escrita", desc: "A arte de explicar coisas complexas de forma clara. Bom código precisa de boa documentação, boas ideias precisam de boa escrita.", emoji: "📝" },
+    { title: "Automação & Eficiência", desc: "Se algo precisa ser feito mais de duas vezes, deve ser automatizado. Obsessão saudável por otimizar workflows e eliminar trabalho repetitivo.", emoji: "⚙️" },
+    { title: "Xadrez & Estratégia", desc: "Do jogo clássico a análises com engines. Xadrez como exercício de pensamento estratégico e previsão de consequências.", emoji: "♟️" },
+    { title: "Minimalismo Digital", desc: "Usar tecnologia de forma intencional, reduzir distrações, e focar no que realmente importa. Menos apps, mais profundidade.", emoji: "🧘" },
+    { title: "Pódcast & Audiobooks", desc: "Aprendizado em movimento. De entrevistas longas a audiobooks de não-ficção, aproveitando tempo morto para absorver conhecimento.", emoji: "🎧" },
+    { title: "Mapas & Cartografia", desc: "Fascinação por como representamos espaço, evolução de técnicas cartográficas, e como mapas contam histórias.", emoji: "🗺️" },
+    { title: "Psicologia & Comportamento", desc: "Como tomamos decisões, viéses cognitivos, economia comportamental e o que nos faz humanos.", emoji: "🧠" },
+    { title: "Arquitetura de Software", desc: "Design de sistemas escaláveis, padrões de projeto, e a arte de estruturar código que outros (incluindo você do futuro) conseguem entender.", emoji: "🏛️" },
+    { title: "Fotografia & Visual", desc: "Capturar momentos, composição, luz. Fotografia como forma de ver o mundo com mais atenção aos detalhes.", emoji: "📸" },
+    { title: "Idiomas & Linguística", desc: "Como linguagens evoluem, etimologia, e o desafio de aprender novos idiomas. Cada língua é uma nova forma de pensar.", emoji: "💬" },
+    { title: "Open Source & Colaboração", desc: "A beleza de construir software em público, contribuir para projetos, e como colaboração distribuída cria coisas incríveis.", emoji: "🌐" },
+    { title: "Mineração & Recursos", desc: "A cadeia que transforma recursos naturais em produtos, impactos ambientais, e como mineração sustentável é possível (e necessária).", emoji: "⛏️" },
+    { title: "Blockchain & Descentralização", desc: "Além do hype das criptomoedas: contratos inteligentes, DAOs, e como sistemas descentralizados podem mudar coordenação humana.", emoji: "🔗" }
+  ];
+
+  function init3DScene() {
+    if (is3DInitialized) {
+      return;
+    }
+    
+    is3DInitialized = true;
+    
+    const canvas = document.getElementById('interestCanvas');
+    const loadingScreen = document.getElementById('loadingScreen');
+    
+    if (!canvas) {
+      showError('Canvas não encontrado!');
+      is3DInitialized = false;
+      return;
+    }
+    
+    if (loadingScreen) {
+      loadingScreen.classList.add('show');
+      loadingScreen.classList.remove('hidden');
+    }
+
+    updateProgress(10, 'VERIFICANDO THREE.JS...');
+    
+    if (typeof THREE === 'undefined') {
+      showError('Three.js não carregou. Verifique sua conexão com a internet.');
+      is3DInitialized = false;
+      return;
+    }
+
+    try {
+      updateProgress(20, 'CRIANDO CENA 3D...');
+      
+      scene3D = new THREE.Scene();
+      scene3D.background = new THREE.Color(0x050510);
+      scene3D.fog = new THREE.Fog(0x050510, 1, 50);
+
+      updateProgress(30, 'CONFIGURANDO CÂMERA...');
+      
+      // Garantir que canvas tem dimensões
+      const canvasWidth = canvas.clientWidth || 800;
+      const canvasHeight = canvas.clientHeight || 600;
+      console.log(`Canvas dimensions: ${canvasWidth}x${canvasHeight}`);
+      
+      camera3D = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 100);
+      camera3D.position.set(0, 1.6, 0);
+
+      updateProgress(40, 'INICIALIZANDO RENDERER...');
+      
+      renderer3D = new THREE.WebGLRenderer({ 
+        canvas, 
+        antialias: true,
+        powerPreference: 'high-performance'
+      });
+      renderer3D.setSize(canvasWidth, canvasHeight);
+      renderer3D.setPixelRatio(window.devicePixelRatio || 1);
+      renderer3D.shadowMap.enabled = true;
+      renderer3D.shadowMap.type = THREE.BasicShadowMap;
+
+      updateProgress(50, 'ADICIONANDO ILUMINAÇÃO...');
+      
+      const ambientLight = new THREE.AmbientLight(0x2bd2ff, 0.3);
+    scene3D.add(ambientLight);
+
+    const mainLight = new THREE.DirectionalLight(0x2bd2ff, 0.5);
+    mainLight.position.set(5, 10, 5);
+    mainLight.castShadow = true;
+    mainLight.shadow.mapSize.width = 1024;
+    mainLight.shadow.mapSize.height = 1024;
+    scene3D.add(mainLight);
+
+    // Point lights for neon effect
+    const neonLight1 = new THREE.PointLight(0xff3cac, 1, 15);
+    neonLight1.position.set(-8, 2, -8);
+    scene3D.add(neonLight1);
+
+      const neonLight2 = new THREE.PointLight(0x8b5cf6, 1, 15);
+      neonLight2.position.set(8, 2, 8);
+      scene3D.add(neonLight2);
+
+      updateProgress(60, 'CONSTRUINDO AMBIENTE...');
+      
+      // Floor with reflection
+      const floorGeometry = new THREE.PlaneGeometry(50, 50);
+    const floorMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0a0a14,
+      metalness: 0.9,
+      roughness: 0.1,
+      envMapIntensity: 1
+    });
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene3D.add(floor);
+
+    // Grid on floor
+    const gridHelper = new THREE.GridHelper(50, 50, 0x2bd2ff, 0x2bd2ff);
+    gridHelper.material.opacity = 0.15;
+      gridHelper.material.transparent = true;
+      scene3D.add(gridHelper);
+
+      updateProgress(70, 'CRIANDO FILING CABINETS...');
+      
+      // Create filing cabinets
+      createFilingCabinets();
+
+      updateProgress(85, 'ADICIONANDO EFEITO DE CHUVA...');
+      
+      // Rain particles
+      createRain();
+
+      updateProgress(95, 'FINALIZANDO...');
+      
+      // Raycaster for clicking
+      raycaster = new THREE.Raycaster();
+      mouse3D = new THREE.Vector2();
+
+      // Remover event listeners antigos (evitar duplicação)
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keyup', onKeyUp);
+      canvas.removeEventListener('mousemove', onMouseMove);
+      canvas.removeEventListener('click', onClick3D);
+      canvas.removeEventListener('mouseleave', onCanvasMouseLeave);
+      canvas.removeEventListener('mouseenter', onCanvasMouseEnter);
+      
+      // Adicionar event listeners
+      document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keyup', onKeyUp);
+      canvas.addEventListener('mousemove', onMouseMove);
+      canvas.addEventListener('click', onClick3D);
+      canvas.addEventListener('mouseleave', onCanvasMouseLeave);
+      canvas.addEventListener('mouseenter', onCanvasMouseEnter);
+
+      // Criar tooltip
+      createTooltip();
+
+      updateProgress(100, 'PRONTO!');
+      
+      // Hide loading screen
+      setTimeout(() => {
+        if (loadingScreen) loadingScreen.classList.add('hidden');
+        is3DInitialized = true;
+        // Inicializar e tocar sons
+        initSounds();
+        playRainSound();
+      }, 500);
+      
+      // Fazer primeiro render imediatamente
+      console.log('Fazendo primeiro render...');
+      renderer3D.render(scene3D, camera3D);
+      
+      // Start animation
+      animate3D();
+      
+    } catch (error) {
+      console.error('Erro ao inicializar 3D:', error);
+      showError('Erro ao carregar ambiente 3D: ' + error.message);
+    }
+  }
+
+  function createFilingCabinets() {
+    const positions = [
+      { x: -8, z: -8 }, { x: -4, z: -9 }, { x: 0, z: -8 }, { x: 4, z: -9 }, { x: 8, z: -8 },
+      { x: -9, z: -3 }, { x: 9, z: -3 },
+      { x: -9, z: 3 }, { x: 9, z: 3 },
+      { x: -8, z: 8 }, { x: -4, z: 9 }, { x: 0, z: 8 }, { x: 4, z: 9 }, { x: 8, z: 8 }
+    ];
+
+    // Reusar geometrias (mas NÃO materiais de gavetas interativas)
+    const bodyGeometry = new THREE.BoxGeometry(1.2, 2, 0.8);
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+      color: 0x1a1a2e,
+      metalness: 0.7,
+      roughness: 0.3
+    });
+    const drawerGeometry = new THREE.BoxGeometry(1.1, 0.45, 0.05);
+    const handleGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.15, 8);
+    const glowGeometry = new THREE.BoxGeometry(1.3, 0.1, 0.9);
+    
+    // Materiais compartilhados APENAS para gavetas vazias
+    const drawerMaterialWhite = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      metalness: 0.8,
+      roughness: 0.2
+    });
+    const handleMaterialGray = new THREE.MeshStandardMaterial({
+      color: 0xaaaaaa,
+      emissive: 0xaaaaaa,
+      emissiveIntensity: 0.2,
+      metalness: 1,
+      roughness: 0.1
+    });
+    const glowMaterial = new THREE.MeshStandardMaterial({
+      color: 0x8b5cf6,
+      emissive: 0x8b5cf6,
+      emissiveIntensity: 0.8
+    });
+
+    let contentIndex = 0;
+    let totalDrawerCount = 0;
+
+    positions.forEach((pos, cabinetIdx) => {
+      const cabinet = new THREE.Group();
+      
+      // Main body (reutilizar geometria e material)
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+      body.castShadow = true;
+      body.receiveShadow = true;
+      cabinet.add(body);
+
+      // Drawers - cada gaveta tem seu próprio interesse
+      for (let i = 0; i < 4; i++) {
+        const drawerGroup = new THREE.Group();
+        
+        // Verificar se esta gaveta tem conteúdo
+        const hasContent = contentIndex < interestData.length;
+        
+        let drawer, handle;
+        
+        if (hasContent) {
+          // Criar materiais ÚNICOS para cada gaveta com conteúdo
+          const drawerMat = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            metalness: 0.8,
+            roughness: 0.2
+          });
+          const handleMat = new THREE.MeshStandardMaterial({
+            color: 0x2bd2ff,
+            emissive: 0x2bd2ff,
+            emissiveIntensity: 0.5,
+            metalness: 1,
+            roughness: 0.1
+          });
+          
+          drawer = new THREE.Mesh(drawerGeometry, drawerMat);
+          handle = new THREE.Mesh(handleGeometry, handleMat);
+        } else {
+          // Gavetas vazias podem compartilhar material
+          drawer = new THREE.Mesh(drawerGeometry, drawerMaterialWhite);
+          handle = new THREE.Mesh(handleGeometry, handleMaterialGray);
+        }
+        
+        drawerGroup.add(drawer);
+        handle.rotation.z = Math.PI / 2;
+        handle.position.z = 0.03;
+        drawerGroup.add(handle);
+
+        drawerGroup.position.y = -0.75 + i * 0.5;
+        drawerGroup.position.z = 0.4;
+        
+        // Cada gaveta tem seu próprio interesse e ID único
+        if (hasContent) {
+          drawerGroup.userData = { 
+            interestIndex: contentIndex, 
+            isInteractive: true,
+            drawerId: `drawer-${contentIndex}`,
+            originalColor: 0x1a1a1a,
+            drawerMesh: drawer,
+            handleMesh: handle
+          };
+          drawer.userData = drawerGroup.userData; // Compartilhar userData com o mesh
+          handle.userData = drawerGroup.userData;
+          contentIndex++;
+        } else {
+          // Gaveta vazia - não interativa
+          drawerGroup.userData = { 
+            isInteractive: false,
+            isEmpty: true
+          };
+        }
+        
+        totalDrawerCount++;
+        cabinet.add(drawerGroup);
+      }
+
+      // Neon glow on top (reutilizar geometria e material)
+      const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+      glow.position.y = 1.05;
+      cabinet.add(glow);
+
+      cabinet.position.set(pos.x, 1, pos.z);
+      cabinet.rotation.y = Math.random() * Math.PI * 2; // Rotação aleatória
+      scene3D.add(cabinet);
+      cabinets.push(cabinet);
+    });
+    
+    console.log(`Total de cabinets criados: ${cabinets.length}`);
+    console.log(`Total de drawers com conteúdo: ${contentIndex}`);
+    console.log(`Total de drawers criados: ${totalDrawerCount}`);
+  }
+
+  function createTooltip() {
+    if (!document.getElementById('drawerTooltip')) {
+      const tooltip = document.createElement('div');
+      tooltip.id = 'drawerTooltip';
+      document.body.appendChild(tooltip);
+    }
+  }
+
+  function createRain() {
+    const particleCount = 300;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 50;
+      positions[i * 3 + 1] = Math.random() * 20;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      velocities.push(Math.random() * 0.1 + 0.1);
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.PointsMaterial({
+      color: 0x2bd2ff,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.6
+    });
+
+    const rain = new THREE.Points(geometry, material);
+    scene3D.add(rain);
+    rainParticles.push({ mesh: rain, velocities });
+  }
+
+  // Cache para drawers interativos (otimização)
+  let interactiveDrawersCache = null;
+  let lastRaycastTime = 0;
+  const raycastThrottle = 50; // ms entre raycasts
+  
+  function getInteractiveDrawers() {
+    if (!interactiveDrawersCache) {
+      interactiveDrawersCache = [];
+      cabinets.forEach(cabinet => {
+        cabinet.children.forEach(child => {
+          if (child.userData && child.userData.isInteractive) {
+            interactiveDrawersCache.push(child);
+          }
+        });
+      });
+      console.log(`Cache criado: ${interactiveDrawersCache.length} drawers interativos`);
+    }
+    return interactiveDrawersCache;
+  }
+
+  function onMouseMove(event) {
+    const canvas = document.getElementById('interestCanvas');
+    const rect = canvas.getBoundingClientRect();
+    
+    // Calcular posição do mouse normalizada para raycast
+    const mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    
+    // Delta de movimento para rotação da câmera
+    const deltaX = event.movementX || event.clientX - lastMousePos.x;
+    const deltaY = event.movementY || event.clientY - lastMousePos.y;
+    
+    lastMousePos.x = event.clientX;
+    lastMousePos.y = event.clientY;
+    
+    // Aplicar rotação baseada no delta (sensibilidade ajustada)
+    const sensitivity = 0.002;
+    cameraRotation.yaw -= deltaX * sensitivity; // Horizontal
+    cameraRotation.pitch -= deltaY * sensitivity; // Vertical (invertido para comportamento natural)
+    
+    // Limitar pitch (vertical) para não virar de cabeça para baixo
+    const maxPitch = Math.PI / 2 - 0.1; // ~89 graus
+    cameraRotation.pitch = Math.max(-maxPitch, Math.min(maxPitch, cameraRotation.pitch));
+    
+    // Detectar se mouse está nas bordas para rotação contínua
+    const mouseRelX = event.clientX - rect.left;
+    const edgeThreshold = 50; // pixels da borda
+    
+    if (mouseRelX < edgeThreshold) {
+      // Borda esquerda - definir direção para girar à esquerda
+      edgeRotationDirection = (edgeThreshold - mouseRelX) / edgeThreshold;
+    } else if (mouseRelX > rect.width - edgeThreshold) {
+      // Borda direita - definir direção para girar à direita
+      edgeRotationDirection = -(mouseRelX - (rect.width - edgeThreshold)) / edgeThreshold;
+    } else {
+      edgeRotationDirection = 0;
+    }
+
+    // Raycast para hover (otimizado com cache e throttle)
+    const now = Date.now();
+    if (raycaster && camera3D && (now - lastRaycastTime) > raycastThrottle) {
+      lastRaycastTime = now;
+      
+      const mouse = new THREE.Vector2(mouseX, mouseY);
+      raycaster.setFromCamera(mouse, camera3D);
+      
+      const allDrawers = getInteractiveDrawers();
+      const intersects = raycaster.intersectObjects(allDrawers, true);
+      const tooltip = document.getElementById('drawerTooltip');
+      
+      if (intersects.length > 0 && tooltip) {
+        let target = intersects[0].object;
+        while (target.parent && !target.userData.isInteractive) {
+          target = target.parent;
+        }
+        
+        if (target.userData && target.userData.isInteractive) {
+          const interest = interestData[target.userData.interestIndex];
+          const isVisited = visitedDrawers.has(target.userData.drawerId);
+          
+          tooltip.textContent = `${interest.emoji} ${interest.title}`;
+          tooltip.style.left = (event.clientX + 15) + 'px';
+          tooltip.style.top = (event.clientY + 15) + 'px';
+          tooltip.style.borderColor = isVisited ? '#ff8c00' : '#2bd2ff';
+          tooltip.classList.add('show');
+          hoveredDrawer = target;
+          canvas.style.cursor = 'pointer';
+          
+          // Aplicar efeito de hover (aumentar brilho)
+          if (previousHoveredDrawer !== target) {
+            // Resetar gaveta anterior
+            if (previousHoveredDrawer && previousHoveredDrawer.userData.drawerMesh) {
+              const prevIsVisited = visitedDrawers.has(previousHoveredDrawer.userData.drawerId);
+              if (prevIsVisited) {
+                previousHoveredDrawer.userData.drawerMesh.material.emissiveIntensity = 0.3;
+                previousHoveredDrawer.userData.handleMesh.material.emissiveIntensity = 0.8;
+              } else {
+                previousHoveredDrawer.userData.drawerMesh.material.emissiveIntensity = 0;
+                previousHoveredDrawer.userData.handleMesh.material.emissiveIntensity = 0.5;
+              }
+            }
+            
+            // Aplicar hover na gaveta atual
+            if (target.userData.drawerMesh) {
+              const currentIsVisited = visitedDrawers.has(target.userData.drawerId);
+              if (currentIsVisited) {
+                target.userData.drawerMesh.material.emissiveIntensity = 0.5;
+                target.userData.handleMesh.material.emissiveIntensity = 1.2;
+              } else {
+                target.userData.drawerMesh.material.emissive.setHex(0x2bd2ff);
+                target.userData.drawerMesh.material.emissiveIntensity = 0.2;
+                target.userData.handleMesh.material.emissiveIntensity = 0.8;
+              }
+            }
+            
+            previousHoveredDrawer = target;
+          }
+        }
+      } else {
+        // Resetar hover da gaveta anterior quando mouse sai
+        if (previousHoveredDrawer && previousHoveredDrawer.userData.drawerMesh) {
+          const prevIsVisited = visitedDrawers.has(previousHoveredDrawer.userData.drawerId);
+          if (prevIsVisited) {
+            previousHoveredDrawer.userData.drawerMesh.material.emissiveIntensity = 0.3;
+            previousHoveredDrawer.userData.handleMesh.material.emissiveIntensity = 0.8;
+          } else {
+            previousHoveredDrawer.userData.drawerMesh.material.emissive.setHex(0x000000);
+            previousHoveredDrawer.userData.drawerMesh.material.emissiveIntensity = 0;
+            previousHoveredDrawer.userData.handleMesh.material.emissiveIntensity = 0.5;
+          }
+          previousHoveredDrawer = null;
+        }
+        
+        if (tooltip) tooltip.classList.remove('show');
+        hoveredDrawer = null;
+        canvas.style.cursor = 'crosshair';
+      }
+    }
+  }
+
+  function onClick3D(event) {
+    const canvas = document.getElementById('interestCanvas');
+    const rect = canvas.getBoundingClientRect();
+    const clickX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const clickY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    
+    mouse3D.x = clickX;
+    mouse3D.y = clickY;
+
+    raycaster.setFromCamera(mouse3D, camera3D);
+    
+    const allDrawers = getInteractiveDrawers();
+    const intersects = raycaster.intersectObjects(allDrawers, true);
+
+    if (intersects.length > 0) {
+      let target = intersects[0].object;
+      while (target.parent && !target.userData.isInteractive) {
+        target = target.parent;
+      }
+      
+      if (target.userData && target.userData.isInteractive) {
+        const drawerId = target.userData.drawerId;
+        
+        // Tocar som de gaveta abrindo
+        playDrawerSound();
+        
+        // Marcar como visitado
+        if (!visitedDrawers.has(drawerId)) {
+          visitedDrawers.add(drawerId);
+          
+          // Mudar cor da gaveta e puxador para laranja usando referências diretas
+          if (target.userData.drawerMesh) {
+            target.userData.drawerMesh.material.color.setHex(0x3a2a1e); // Laranja escuro
+            target.userData.drawerMesh.material.emissive.setHex(0xff8c00); // Emissive laranja neon
+            target.userData.drawerMesh.material.emissiveIntensity = 0.3;
+          }
+          
+          if (target.userData.handleMesh) {
+            target.userData.handleMesh.material.color.setHex(0xff8c00); // Laranja neon
+            target.userData.handleMesh.material.emissive.setHex(0xff8c00);
+            target.userData.handleMesh.material.emissiveIntensity = 0.8;
+          }
+        }
+        
+        showInterestCard(target.userData.interestIndex);
+      }
+    }
+  }
+
+  function showInterestCard(index) {
+    const interest = interestData[index];
+    if (!interest) return;
+    
+    // Centralizar visão verticalmente
+    cameraRotation.pitch = 0;
+
+    // Remove existing card
+    const existingCard = document.querySelector('.interest-card');
+    if (existingCard) existingCard.remove();
+
+    const existingOverlay = document.querySelector('.canvas-overlay');
+    if (existingOverlay) existingOverlay.remove();
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'canvas-overlay show';
+    document.body.appendChild(overlay);
+
+    // Create card
+    const card = document.createElement('div');
+    card.className = 'interest-card show';
+    card.innerHTML = `
+      <div class="close-btn" onclick="this.parentElement.classList.remove('show'); document.querySelector('.canvas-overlay').classList.remove('show'); setTimeout(() => { this.parentElement.remove(); document.querySelector('.canvas-overlay').remove(); }, 300);">✕</div>
+      <h3>${interest.emoji} ${interest.title}</h3>
+      <p>${interest.desc}</p>
+    `;
+    document.body.appendChild(card);
+
+    overlay.addEventListener('click', () => {
+      card.classList.remove('show');
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        card.remove();
+        overlay.remove();
+      }, 300);
+    });
+  }
+
+  function animate3D() {
+    if (!animationFrameId) {
+      console.log('>>> Loop de animação iniciado');
+    }
+    
+    animationFrameId = requestAnimationFrame(animate3D);
+    
+    // Se estiver pausado, não atualizar movimento mas continuar renderizando
+    if (isPaused) {
+      renderer3D.render(scene3D, camera3D);
+      return;
+    }
+
+    // Player movement com aceleração suave
+    const acceleration = 0.025; // Aumentado de 0.015 para 0.025
+    const friction = 0.88; // Aumentado de 0.85 para 0.88
+    const maxSpeed = 0.2; // Aumentado de 0.15 para 0.25
+    const lookSpeed = 0.02; // Aumentado de 0.008 para 0.02
+    const smoothness = 0.15; // Para suavização da rotação vertical
+
+    // Aplicar aceleração baseada nas teclas (usando yaw da câmera)
+    if (keys['w']) {
+      velocity.x -= Math.sin(cameraRotation.yaw) * acceleration;
+      velocity.z -= Math.cos(cameraRotation.yaw) * acceleration;
+    }
+    if (keys['s']) {
+      velocity.x += Math.sin(cameraRotation.yaw) * acceleration;
+      velocity.z += Math.cos(cameraRotation.yaw) * acceleration;
+    }
+    if (keys['a']) {
+      velocity.x -= Math.cos(cameraRotation.yaw) * acceleration;
+      velocity.z += Math.sin(cameraRotation.yaw) * acceleration;
+    }
+    if (keys['d']) {
+      velocity.x += Math.cos(cameraRotation.yaw) * acceleration;
+      velocity.z -= Math.sin(cameraRotation.yaw) * acceleration;
+    }
+
+    // Limitar velocidade máxima
+    const currentSpeed = Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+    if (currentSpeed > maxSpeed) {
+      velocity.x = (velocity.x / currentSpeed) * maxSpeed;
+      velocity.z = (velocity.z / currentSpeed) * maxSpeed;
+    }
+
+    // Aplicar fricção
+    velocity.x *= friction;
+    velocity.z *= friction;
+
+    // Atualizar posição
+    player.x += velocity.x;
+    player.z += velocity.z;
+    
+    // Aplicar rotação contínua nas bordas
+    if (edgeRotationDirection !== 0) {
+      const edgeRotationSpeed = 0.03;
+      cameraRotation.yaw += edgeRotationDirection * edgeRotationSpeed;
+    }
+
+    // Update camera position and rotation
+    camera3D.position.x = player.x;
+    camera3D.position.z = player.z;
+    camera3D.rotation.order = 'YXZ'; // Importante: ordem correta para FPS
+    camera3D.rotation.y = cameraRotation.yaw;   // Rotação horizontal
+    camera3D.rotation.x = cameraRotation.pitch; // Rotação vertical
+
+    // Animate rain (otimizado)
+    if (rainParticles.length > 0) {
+      const { mesh, velocities } = rainParticles[0];
+      const positions = mesh.geometry.attributes.position.array;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] -= velocities[i / 3];
+        if (positions[i + 1] < 0) {
+          positions[i + 1] = 20;
+        }
+      }
+      mesh.geometry.attributes.position.needsUpdate = true;
+    }
+
+    // Animate cabinet glows
+    cabinets.forEach((cabinet, idx) => {
+      const glow = cabinet.children[cabinet.children.length - 1];
+      if (glow) {
+        glow.material.emissiveIntensity = 0.5 + Math.sin(Date.now() * 0.001 + idx) * 0.3;
+      }
+    });
+
+    renderer3D.render(scene3D, camera3D);
+  }
+
+  function stop3DScene() {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  // Initialize 3D scene when tab is activated
+  tabs.forEach(t => t.addEventListener("click", () => {
+    if (t.dataset.tab === 'interesses') {
+      setTimeout(() => {
+        if (!scene3D) init3DScene();
+      }, 100);
+    } else {
+      stop3DScene();
+    }
+  }));
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (renderer3D && camera3D) {
+      const canvas = document.getElementById('interestCanvas');
+      camera3D.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera3D.updateProjectionMatrix();
+      renderer3D.setSize(canvas.clientWidth, canvas.clientHeight);
+    }
+  });
 </script>
 </body>
 </html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tiago | GitHub Portfolio</title>
+
+  <!-- Fonte retrô 80/90 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #05010c;
+      --bg2:#0c0220;
+      --neon-pink:#ff3cac;
+      --neon-cyan:#2bd2ff;
+      --neon-purple:#8b5cf6;
+      --neon-green:#00f5a0;
+      --text:#e6e6e6;
+      --muted:#a7a7a7;
+      --card:#0b0b16;
+      --card2:#120b28;
+      --grid:rgba(43,210,255,0.12);
+      --warning:#ffd166;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, #1a0a3a 0%, transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, #0a3a35 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      font-family: "VT323", monospace;
+      font-size: 20px;
+      letter-spacing: .3px;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    /* Scanlines + noise (CRT) */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 1px,
+          rgba(0,0,0,0.02) 2px,
+          rgba(0,0,0,0.02) 3px
+        );
+      mix-blend-mode: overlay;
+      pointer-events:none;
+      opacity:.35;
+      z-index:2;
+      animation: scanMove 8s linear infinite;
+    }
+    body::after{
+      content:"";
+      position:fixed; inset:-20%;
+      background-image:
+        url('data:image/svg+xml;utf8,\
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">\
+          <filter id="n">\
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>\
+          </filter>\
+          <rect width="120" height="120" filter="url(%23n)" opacity="0.08"/>\
+        </svg>');
+      pointer-events:none;
+      opacity:.25;
+      z-index:1;
+      animation: noise 0.6s steps(2) infinite;
+    }
+
+    @keyframes scanMove{ 
+      0%{transform:translateY(0);} 
+      100%{transform:translateY(12px);} 
+    }
+    @keyframes noise{
+      0%{transform:translate(0,0);}
+      25%{transform:translate(-2%,1%);}
+      50%{transform:translate(2%,-1%);}
+      75%{transform:translate(-1%,-2%);}
+      100%{transform:translate(1%,2%);}
+    }
+
+    header{
+      padding:48px 20px 10px;
+      max-width:1100px;
+      margin:0 auto;
+      position:relative;
+      z-index:3;
+    }
+
+    .topbar{
+      display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+      border:1px solid var(--grid);
+      background:linear-gradient(180deg, rgba(11,11,22,0.9), rgba(18,11,40,0.9));
+      padding:16px;
+      border-radius:10px;
+      box-shadow:
+        0 0 25px rgba(255,60,172,0.15),
+        0 0 30px rgba(43,210,255,0.08);
+      animation: flicker 4.5s infinite;
+    }
+
+    @keyframes flicker{
+      0%, 100% {filter:brightness(1);}
+      92% {filter:brightness(1);}
+      93% {filter:brightness(1.1);}
+      94% {filter:brightness(0.9);}
+      96% {filter:brightness(1.05);}
+    }
+
+    .avatar{
+      width:120px; height:120px; border-radius:8px; flex:0 0 auto;
+      border:2px solid var(--neon-cyan);
+      box-shadow:0 0 15px rgba(43,210,255,0.7);
+      image-rendering: pixelated;
+      background:#000;
+    }
+
+    .title{
+      font-family:"Press Start 2P", system-ui;
+      font-size:20px; line-height:1.3; color:#fff;
+      text-shadow:
+        0 0 6px var(--neon-cyan),
+        0 0 12px var(--neon-pink);
+    }
+
+    .subtitle{
+      color:var(--muted);
+      font-size:22px;
+    }
+
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border:1px solid var(--grid);
+      border-radius:6px;
+      background:rgba(0,0,0,0.35);
+      color:#fff;
+      margin:2px 6px 2px 0;
+      box-shadow:0 0 8px rgba(139,92,246,0.25);
+      font-size:18px;
+    }
+
+    main{
+      max-width:1100px; margin:0 auto; padding:20px;
+      position:relative; z-index:3;
+    }
+
+    .section{
+      margin:22px 0 42px;
+      border:1px solid var(--grid);
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(11,11,22,0.9), rgba(18,11,40,0.85));
+      padding:18px 18px 10px;
+      box-shadow:0 0 20px rgba(139,92,246,0.12);
+    }
+
+    .section h2{
+      font-family:"Press Start 2P";
+      font-size:14px;
+      letter-spacing:1px;
+      margin:0 0 12px 0;
+      color:var(--neon-green);
+      text-shadow:0 0 8px rgba(0,245,160,0.8);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:12px;
+    }
+
+    .card{
+      background: radial-gradient(600px 200px at 20% -20%, #1b0b3e 0%, transparent 70%),
+                  linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--grid);
+      border-radius:8px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+      transform:translateY(6px);
+      opacity:0;
+      animation: riseIn .6s ease forwards;
+    }
+    .card:nth-child(2){animation-delay:.08s;}
+    .card:nth-child(3){animation-delay:.16s;}
+    .card:nth-child(4){animation-delay:.24s;}
+    .card:nth-child(5){animation-delay:.32s;}
+    .card:nth-child(6){animation-delay:.40s;}
+
+    @keyframes riseIn{
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .card:hover{
+      border-color:rgba(255,60,172,0.7);
+      box-shadow:
+        0 0 0 1px rgba(255,60,172,0.4),
+        0 0 18px rgba(255,60,172,0.35),
+        0 0 28px rgba(43,210,255,0.18);
+      transform:translateY(-2px);
+      transition:all .15s ease;
+    }
+
+    .repo-title{
+      display:flex; justify-content:space-between; gap:8px; align-items:center;
+      margin-bottom:6px;
+    }
+
+    .repo-title a{
+      color:#fff; text-decoration:none; font-weight:700;
+      text-shadow:0 0 6px rgba(43,210,255,0.6);
+      letter-spacing:.4px;
+      font-size:22px;
+    }
+
+    .repo-meta{
+      color:var(--muted);
+      font-size:18px;
+    }
+
+    .label{
+      font-family:"Press Start 2P";
+      font-size:10px;
+      color:#000;
+      background:var(--warning);
+      padding:4px 6px;
+      border-radius:4px;
+      box-shadow:0 0 8px rgba(255,209,102,.7);
+    }
+
+    .lang{
+      color:var(--neon-cyan);
+      font-weight:700;
+    }
+
+    .desc{
+      min-height:42px;
+    }
+
+    .links{
+      margin-top:8px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-block;
+      padding:6px 10px;
+      border:1px solid var(--grid);
+      border-radius:6px;
+      text-decoration:none;
+      color:#fff;
+      background:rgba(0,0,0,0.4);
+      font-size:18px;
+      box-shadow:0 0 10px rgba(43,210,255,0.12);
+    }
+    .btn:hover{
+      border-color:var(--neon-cyan);
+      box-shadow:0 0 14px rgba(43,210,255,0.5);
+    }
+
+    footer{
+      max-width:1100px; margin:0 auto; padding:0 20px 40px;
+      color:var(--muted); position:relative; z-index:3;
+      font-size:18px;
+    }
+
+    .tiny{
+      font-size:18px;
+      color:var(--muted);
+    }
+
+    .hr{
+      height:1px; background:var(--grid); margin:10px 0 14px;
+    }
+
+    .blink{
+      animation: blink 1.2s step-end infinite;
+    }
+    @keyframes blink{
+      50%{opacity:0;}
+    }
+
+    /* Divisor de categorias */
+    .cat{
+      display:flex; align-items:center; gap:8px;
+      margin:10px 0 8px;
+    }
+    .cat span{
+      font-family:"Press Start 2P";
+      font-size:11px;
+      color:var(--neon-pink);
+      text-shadow:0 0 8px rgba(255,60,172,0.9);
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <img id="avatar" class="avatar" src="" alt="avatar">
+    <div style="flex:1 1 320px;">
+      <div class="title" id="name">Carregando<span class="blink">_</span></div>
+      <div class="subtitle" id="headline"></div>
+      <div class="tiny" id="location"></div>
+      <div style="margin-top:8px;" id="chips"></div>
+      <div class="links">
+        <a id="ghLink" class="btn" target="_blank">GitHub</a>
+        <a id="cmpLink" class="btn" target="_blank" href="#">CMP / Carbon Metrics Project</a>
+        <a id="mailLink" class="btn" href="#">Contato</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <h2>APRESENTAÇÃO</h2>
+    <p id="bioText">
+      Carregando perfil do GitHub...
+    </p>
+    <div class="hr"></div>
+    <p>
+      Trabalho com consultoria em descarbonização, modelagem de emissões e otimização de decisões
+      para indústria pesada e logística. Desenvolvo ferramentas próprias em Python (SimPy, otimização,
+      dashboards em Streamlit), e também projetos criativos como jogos, narrativas históricas e sistemas
+      de RPG. Gosto de juntar rigor técnico e imaginação útil.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>FERRAMENTAS DE TRABALHO</h2>
+    <div class="cat"><span>> Modelos, simuladores, calculadoras</span></div>
+    <div id="workRepos" class="grid"></div>
+  </section>
+
+  <section class="section">
+    <h2>PROJETOS PESSOAIS</h2>
+    <div class="cat"><span>> Jogos, LSBC, experimentos criativos</span></div>
+    <div id="personalRepos" class="grid"></div>
+  </section>
+
+  <section class="section">
+    <h2>OUTROS REPOSITÓRIOS</h2>
+    <div id="otherRepos" class="grid"></div>
+  </section>
+</main>
+
+<footer>
+  <div>© <span id="year"></span> Tiago — feito com neon, café e teimosia.</div>
+  <div class="tiny">Hospedado via GitHub Pages.</div>
+</footer>
+
+
+<script>
+  const username = "SEU_USUARIO"; // <-- TROQUE AQUI
+
+  // Edite essas listas com os "pins" reais.
+  // Coloque o nome do repo exatamente como no GitHub.
+  const workProjects = [
+    // exemplos (troque pelos seus):
+    "veso-optimizer",
+    "calculadora-emissoes",
+    "simpy-port-operations",
+    "streamlit-sankey-dashboard"
+  ];
+
+  const personalProjects = [
+    // exemplos (troque pelos seus):
+    "lsbc",
+    "futgol",
+    "reis-de-nassau",
+    "pirate-platformer-godot"
+  ];
+
+  // Chips de identidade (baseado no que eu sei de você)
+  const identityChips = [
+    "Consultoria em Descarbonização",
+    "Modelagem & Otimização",
+    "Simulação Discreta (SimPy)",
+    "Python / Streamlit",
+    "Jogos & Ferramentas Criativas",
+    "CMP — Carbon Metrics Project"
+  ];
+
+  function makeRepoCard(repo, tagText=null){
+    const lang = repo.language || "N/A";
+    const updated = new Date(repo.updated_at).toLocaleDateString("pt-BR");
+    const desc = repo.description || "Sem descrição ainda. (melhorar isso ajuda mais do que você imagina).";
+
+    return `
+      <article class="card">
+        <div class="repo-title">
+          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          ${tagText ? `<span class="label">${tagText}</span>` : ""}
+        </div>
+        <div class="desc">${desc}</div>
+        <div class="repo-meta">
+          <span class="lang">${lang}</span> • ★ ${repo.stargazers_count} • Forks ${repo.forks_count}
+          <br/>Atualizado em ${updated}
+        </div>
+        <div class="links">
+          <a class="btn" href="${repo.html_url}" target="_blank">Código</a>
+          ${repo.homepage ? `<a class="btn" href="${repo.homepage}" target="_blank">Demo</a>` : ""}
+        </div>
+      </article>
+    `;
+  }
+
+  async function loadProfile(){
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    const u = await res.json();
+
+    document.getElementById("avatar").src = u.avatar_url;
+    document.getElementById("name").textContent = u.name || u.login;
+
+    document.getElementById("headline").textContent =
+      "Consultor • Desenvolvedor • Criador de ferramentas e mundos";
+
+    document.getElementById("location").textContent =
+      u.location ? `Base: ${u.location}` : "Base: Brasil";
+
+    document.getElementById("ghLink").href = u.html_url;
+    document.getElementById("mailLink").href =
+      u.email ? `mailto:${u.email}` : `https://github.com/${username}`;
+
+    const chipsDiv = document.getElementById("chips");
+    chipsDiv.innerHTML = identityChips.map(c => `<span class="chip">${c}</span>`).join("");
+
+    // Bio da API + um complemento seu
+    const gitBio = u.bio ? u.bio : "";
+    document.getElementById("bioText").textContent = gitBio || 
+      "Consultor em descarbonização e otimização de decisões, desenvolvedor de ferramentas próprias e projetos criativos.";
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  }
+
+  async function loadRepos(){
+    const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+    let repos = await res.json();
+    if (!Array.isArray(repos)) repos = [];
+
+    // Ordena por estrelas, depois update
+    repos.sort((a,b) => (b.stargazers_count - a.stargazers_count) ||
+                        (new Date(b.updated_at) - new Date(a.updated_at)));
+
+    const work = [];
+    const personal = [];
+    const other = [];
+
+    const workSet = new Set(workProjects.map(x => x.toLowerCase()));
+    const personalSet = new Set(personalProjects.map(x => x.toLowerCase()));
+
+    repos.forEach(r => {
+      const name = r.name.toLowerCase();
+      if (workSet.has(name)) work.push(r);
+      else if (personalSet.has(name)) personal.push(r);
+      else other.push(r);
+    });
+
+    const workDiv = document.getElementById("workRepos");
+    const personalDiv = document.getElementById("personalRepos");
+    const otherDiv = document.getElementById("otherRepos");
+
+    workDiv.innerHTML = work.length
+      ? work.map(r => makeRepoCard(r, "TRABALHO")).join("")
+      : `<div class="tiny">Sem pins definidos ainda. Edite a lista workProjects no HTML.</div>`;
+
+    personalDiv.innerHTML = personal.length
+      ? personal.map(r => makeRepoCard(r, "PESSOAL")).join("")
+      : `<div class="tiny">Sem pins definidos ainda. Edite a lista personalProjects no HTML.</div>`;
+
+    otherDiv.innerHTML = other.length
+      ? other.slice(0, 18).map(r => makeRepoCard(r)).join("")
+      : `<div class="tiny">Nenhum repositório encontrado.</div>`;
+  }
+
+  loadProfile();
+  loadRepos();
+</script>
+</body>
+</html>
